@@ -1,6 +1,6 @@
 # Internship To-Do App
 
-Welcome to the NFQ Internship To-Do App project repository! This project is designed to help you, our interns, learn and build a basic to-do application using native HTML, CSS, and JavaScript.
+Welcome to the NFQ Internship To-Do App project repository! This project is designed to help you, our interns, learn and build a basic to-do application using native HTML, CSS, and JavaScript. Galaly
 
 ## Table of Contents
 
@@ -28,7 +28,6 @@ This repository serves as the starting template for our journey together. The NF
 -   **HTML:** For structuring our application.
 -   **CSS:** To style our application and make it visually appealing.
 -   **JavaScript:** To add functionality and interactivity to our app.
-- **Galaly's mind:** A powerful tool to use
 
 ## Getting Started
 
