@@ -13,7 +13,7 @@ Welcome to the NFQ Internship To-Do App project repository! This project is desi
 
 ## Project Overview
 
-This repository serves as the starting template for our journey together. The NFQ Internship To-Do App aims to provide a simple yet functional application that allows users to manage their tasks efficiently. As we progress, we will build upon this template to create a fully functional to-do app.
+This repository serves as the starting template for our journey together. The NFQ Internship To-Do App aims to provide a simple yet functional application that allows users to manage their tasks efficiently. As we progress, we will build upon this template to create a fully functional to-do app (Dalia Amr).
 
 ## What We Will Build Together
 
