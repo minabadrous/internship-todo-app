@@ -28,6 +28,7 @@ This repository serves as the starting template for our journey together. The NF
 -   **HTML:** For structuring our application.
 -   **CSS:** To style our application and make it visually appealing.
 -   **JavaScript:** To add functionality and interactivity to our app.
+- **Galaly's mind:** A powerful tool to use
 
 ## Getting Started
 
