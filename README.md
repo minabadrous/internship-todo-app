@@ -1,6 +1,6 @@
 # Internship To-Do App
 
-Welcome to the NFQ Internship To-Do App project repository! This project is designed to help you, our interns, learn and build a basic to-do application using native HTML, CSS, and JavaScript.
+Welcome to the NFQ Internship To-Do App project repository! This project is designed to help you, our interns, learn and build a basic to-do application using native HTML, CSS, and JavaScript. I am glad to be here.
 
 ## Table of Contents
 
