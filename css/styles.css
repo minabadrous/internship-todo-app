@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #c05606;
+    background-color: #5e1eb3;
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
@@ -17,4 +17,39 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   gap: 25px; 
+}
+
+
+.textInputField {
+    border-radius: 25px;
+    width: 300px;
+    height: 30px;
+  
+    
+}
+.oval {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+    border-radius: 25px;
+    width: 40px;
+    height: 40px;
+    background-color: #ecece4;
+}
+
+.submitField {
+    font-size: 20px;
+    border-radius: 25px;
+    width: 30px;
+    height: 30px;
+    background-color: #f0f012;
+    color: #ecece4;
+    
 }
