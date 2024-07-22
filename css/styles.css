@@ -18,3 +18,33 @@ header {
     justify-content: center;
     align-items: center;
 }
+
+.Border {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.Text {
+    height: 40px;
+    width: 210px;
+    border-radius: 25px;
+}
+
+.Submit {
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+    background-color: yellow;
+}
+
+.Circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 25px;
+    background-color: white;
+}
