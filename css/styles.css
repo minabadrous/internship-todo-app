@@ -34,6 +34,7 @@ header {
   border-radius: 25px;
   width: 250px;
   height: 40px;
+  font-size: 15pt;
   font-family: "Poppins", sans-serif;
 }
 
@@ -48,7 +49,7 @@ header {
   height: 40px;
 }
 
-#new button :hover {
+#new button:hover {
   background-color: rgb(116, 192, 252);
   border: solid;
   border-color: lightyellow;
