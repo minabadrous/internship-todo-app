@@ -1,20 +1,60 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: #c05606;
-    color: white;
-    font-family: "Poppins", sans-serif;
-    min-height: 100vh;
+  background-color: blue;
+  color: rgb(116, 192, 252);
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
 }
 
 header {
-    font-size: 1.5rem;
-    min-height: 20vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-size: 1.5rem;
+  min-height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#new {
+  display: flex;
+  justify-content: center;
+}
+
+#new form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#textBox {
+  border-radius: 25px;
+  width: 250px;
+  height: 40px;
+  font-family: "Poppins", sans-serif;
+}
+
+#new button {
+  background-color: lightyellow;
+  border: solid;
+  border-color: rgb(116, 192, 252);
+  border-width: 6px;
+  border-radius: 100%;
+  padding: 3px;
+  width: 40px;
+  height: 40px;
+}
+
+#new button :hover {
+  background-color: rgb(116, 192, 252);
+  border: solid;
+  border-color: lightyellow;
+  border-width: 6px;
+  border-radius: 100%;
+  padding: 3px;
+  width: 40px;
+  height: 40px;
 }
