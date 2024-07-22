@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #c05606;
+    background-color: #e151a0;
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
@@ -17,4 +17,60 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#userInput {
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.circle-bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: rgb(246, 243, 243);
+    border-radius: 50%;
+    margin-left: 10px;
+    gap: 30px;
+
+}
+
+.insidecircle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    background-color: rgb(20, 236, 117);
+    border-radius: 50%;
+
+}
+
+.insidecircle i {
+    font-size: 20px;
+    color: rgb(255, 250, 250);
+    border-radius: 25px;
+}
+
+.insidecircle:hover {
+    background-color: #475a57;
+    display: flex;
+
+    opacity: 0.6;
+    transition: 0.3s;
 }
