@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #c05606;
+    background-color: #06aa5b;
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
@@ -17,4 +17,44 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+#todo-form {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    gap: 20px;
+    
+}
+
+#todo-input {
+    width: 50%;
+    padding: 30px;
+    font-size: 16px;
+    border: 3px solid #ccc;
+    border-radius: 50px;
+    background-color: #e8d5c7;
+    border-color: #0f0e0d;
+    
+}
+
+.Add-button {
+    padding: 10px ;
+    font-size: 16px;
+    border: 3px solid #ccc;
+    border-radius: 50px;
+    border-color: #080807;
+    background-color: #e8d5c7;
+    color: #fafe0c;
+    cursor: pointer;
+    
+}
+
+.Add-button:hover{
+    background-color: #cec2c2;
+}
+
+.Add-button i {
+    font-size: 40px;
 }
