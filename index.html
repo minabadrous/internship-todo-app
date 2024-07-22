@@ -1,27 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
-            rel="stylesheet"
-        />
-        <!-- Font Awesome cdn css -->
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-            integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-        />
-        <link rel="stylesheet" href="./css/styles.css" />
-        <title>NFQ To Do APP</title>
-    </head>
-    <body>
-        <header>
-            <h1>NFQ To Do APP</h1>
-        </header>
-    </body>
+<head>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <!-- Font Awesome cdn css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <title>NFQ To Do APP</title>
+</head>
+<body>
+    <header>
+        <h1>NFQ To Do APP</h1>
+    </header>
+    <main>
+        <div class="task-input">
+            <input type="text" id="new-task" placeholder="Enter new task" />
+            <button id="add-task">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <ul id="task-list"></ul>
+    </main>
+    <script>
+        document.getElementById('add-task').addEventListener('click', function() {
+            const taskInput = document.getElementById('new-task');
+            const task = taskInput.value.trim();
+            if (task) {
+                addTask(task);
+                taskInput.value = ''; // Clear the input field
+            }
+        });
+
+        function addTask(task) {
+            const taskList = document.getElementById('task-list');
+            const listItem = document.createElement('li');
+            listItem.className = 'task-item';
+
+            const taskText = document.createElement('span');
+            taskText.textContent = task;
+
+            const completeButton = document.createElement('button');
+            completeButton.className = 'complete-task';
+            completeButton.innerHTML = '<i class="fas fa-check"></i>';
+            completeButton.addEventListener('click', function() {
+                taskText.style.textDecoration = 'line-through';
+            });
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-task';
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener('click', function() {
+                taskList.removeChild(listItem);
+            });
+
+            listItem.appendChild(taskText);
+            listItem.appendChild(completeButton);
+            listItem.appendChild(deleteButton);
+
+            taskList.appendChild(listItem);
+        }
+    </script>
+</body>
 </html>
