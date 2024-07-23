@@ -19,12 +19,12 @@ header {
   align-items: center;
 }
 
-#new {
+#form-header {
   display: flex;
   justify-content: center;
 }
 
-#new form {
+#form-header form {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -32,6 +32,7 @@ header {
 
 #todo-input {
   border-radius: 25px;
+  padding-left: 5px;
   width: 250px;
   height: 40px;
   font-size: 15pt;
@@ -58,4 +59,51 @@ header {
   padding: 3px;
   width: 40px;
   height: 40px;
+}
+
+#task-container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+#task-container p {
+  flex: 1;
+  color: black;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  align-items: center;
+  font-size: 13pt;
+}
+
+#trash-can {
+  background-color: red;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding-top: 5px;
+  padding-right: 7px;
+}
+
+#check-mark {
+  background-color: greenyellow;
+  color: black;
+  font-family: "Poppins", sans-serif;
+  padding-top: 5px;
+}
+
+#task-container ul {
+  list-style: none;
+  width: 300px;
+}
+
+#task-container li {
+  list-style: none;
+  display: flex;
+  margin-top: 20px;
+  border-radius: 25px;
+  background-color: white;
+  padding-left: 5px;
 }
