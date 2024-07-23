@@ -27,7 +27,7 @@ header {
 
 #plus{
     padding: 2% ;
-    font-size: 50px;
+    font-size: 40px;
     width: 50px;
     height: 50px;
 }
@@ -35,15 +35,56 @@ header {
 .circle{
     border-radius: 50%;
     background-color: yellow;
-    font-size: 35px;
+    font-size: 40px;
     cursor: pointer;
     width: 50px;
     height: 50px;
 }
-.flex{
+form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:10px
+}
+
+form button:hover{
+    color:white;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.list {
+    min-width: 30%;
+    list-style: none;
+    justify-content: center;
+    align-items: center;
+    display: grid;
+    height: 50px;
+    border-radius: 25px;
+}
+
+.items{
+    background-color: white;
+    width:250px;
+    height: 50px;
+    color: black;
     display: flex;
     align-items: center;
-    justify-items: center;
-    text-align: center;
-    gap:10px;
+    padding: 10px;
+    gap: 10px;
+    margin-top: 50px;
+    border-radius: 25px;
+}
+
+.items p{
+    flex: 1;
+}
+
+.done{
+    text-decoration: line-through;
+    text-decoration-thickness: 2pt;
 }
