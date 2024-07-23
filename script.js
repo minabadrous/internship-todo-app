@@ -2,13 +2,21 @@ const form = document.querySelector("form");
 const ul = document.querySelector("ul");
 const input = document.querySelector("input");
 
+const delFunc = (elem) => {
+  elem.parentNode.remove();
+};
+
+const checkFunc = (elem) => {
+  elem.parentNode.childNodes[0].classList.toggle("done");
+};
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   console.log(input.value);
   const li = document.createElement("li");
 
   const innerContent = `<p>${input.value}</p>
-          <button id="check-mark">
+          <button class="check-mark" onclick = "checkFunc(this)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
@@ -23,7 +31,7 @@ form.addEventListener("submit", (e) => {
             </svg>
           </button>
 
-          <button id="trash-can" onclick="remove_Task()">
+          <button class="trash-can" onclick = "delFunc(this)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
@@ -41,7 +49,3 @@ form.addEventListener("submit", (e) => {
   li.innerHTML = innerContent;
   ul.appendChild(li);
 });
-
-function remove_Task() {
-  ul.removeChild(ul.firstElementChild);
-}

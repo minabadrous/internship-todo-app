@@ -76,10 +76,10 @@ header {
   font-family: "Poppins", sans-serif;
   display: flex;
   align-items: center;
-  font-size: 13pt;
+  font-size: 15pt;
 }
 
-#trash-can {
+.trash-can {
   background-color: red;
   border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
@@ -87,7 +87,7 @@ header {
   padding-right: 7px;
 }
 
-#check-mark {
+.check-mark {
   background-color: greenyellow;
   color: black;
   font-family: "Poppins", sans-serif;
@@ -106,4 +106,9 @@ header {
   border-radius: 25px;
   background-color: white;
   padding-left: 5px;
+}
+
+.done {
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
 }
