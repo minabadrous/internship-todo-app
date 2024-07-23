@@ -20,11 +20,20 @@ header {
     font-family: 'Times New Roman', Times, serif;
 }
 
-#toDo{
+/* #toDo{
     text-align: center;
     display: flex;
     justify-content: center;
     margin-top: 80px;
+} */
+
+#inputForm{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: 80px;
+
 }
 
 #inputF{
@@ -61,3 +70,58 @@ header {
     border-color: white;
 
 }
+
+#outputList{
+   
+    height: 50px;
+    width:250px;
+    display: flex;
+    justify-content: center;
+    
+    flex-wrap: wrap;
+    gap: 20px;
+
+}
+
+
+.list-item{
+    background-color: white;
+    border-radius: 25px;
+    height: 55px;
+    width:230px;
+    display: flex;
+    align-items: center;
+    color: blueviolet;
+    padding: 15px;
+}
+
+.delbtns {
+    border-radius: 25px;
+}
+
+.list-item span {
+    flex: 1;
+}
+
+#divOutput{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+
+}
+
+
+
+.done {
+    text-decoration: line-through;
+}
+
+.listButtons{
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border: 0cm;
+    color: blueviolet;
+    
+}
+
