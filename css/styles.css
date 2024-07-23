@@ -1,98 +1,97 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: #9806c0;
-    color: white;
-    font-family: "Poppins", sans-serif;
-    min-height: 100vh;
+  background-color: #9806c0;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
 }
 
 header {
-    font-size: 1.5rem;
-    min-height: 20vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-size: 1.5rem;
+  min-height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.tasksSection,.tasks{
-display: flex;
-flex-wrap: wrap;
-justify-content: center;
-align-items: center;
-margin-top: 100px;
+.tasksSection,
+.tasks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
 }
-.textSlot{
-
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;   
-    margin-bottom: 10px;
+.textSlot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
 }
-.txtField{
-height: 50px;
-width: 350px;
-border: black;
-border-width: 20px;
-border-radius: 20px;
-margin-right: 20px;
+.txtField {
+  height: 50px;
+  width: 350px;
+  border: black;
+  border-width: 20px;
+  border-radius: 20px;
+  margin-right: 20px;
 }
-.btn{
-border-radius: 50%;
-border: none;
-height: 40px;
-width: 40px;
-font-size: larger;
+.btn {
+  border-radius: 50%;
+  border: none;
+  height: 40px;
+  width: 40px;
+  font-size: larger;
 }
-.smalltxtField{
-    height: 50px;
-    width: 450px;
-    border: black;
-    border-width: 20px;
-    border: none    ;
-    text-align: center; 
-    display: inline-block; 
-    display: flex;
-    flex-wrap: wrap;
-    border-radius: 20px 0 0 20px; 
+.smalltxtField {
+  height: 50px;
+  width: 450px;
+  border: black;
+  border-width: 20px;
+  border: none;
+  text-align: center;
+  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 20px 0 0 20px;
 }
-.deleteBtn,.doneBtn{
-    height: 50px;
-    width: 50px;
-    background-color:rgb(255, 157, 0);
-    border: none;
+.deleteBtn,
+.doneBtn {
+  height: 50px;
+  width: 50px;
+  background-color: rgb(255, 157, 0);
+  border: none;
 }
-.deleteBtn{
-    background-color:rgba(117, 109, 109, 0.959);
-    border-radius: 0 20px 20px 0; 
+.deleteBtn {
+  background-color: rgba(117, 109, 109, 0.959);
+  border-radius: 0 20px 20px 0;
 }
-.deleteBtn:hover{
-    background-color: rgba(238, 13, 13, 0.959);
-    color: black;
+.deleteBtn:hover {
+  background-color: rgba(238, 13, 13, 0.959);
+  color: black;
 }
-.doneBtn:hover{
-    background-color: #46e403;
-
+.doneBtn:hover {
+  background-color: #46e403;
 }
 .btn:hover {
-    background-color: #dd630b;
-    color: white;
+  background-color: #dd630b;
+  color: white;
 }
-.tasks{
-
-    display: flex;
-    flex-direction: column;
+.tasks {
+  display: flex;
+  flex-direction: column;
 }
-.btnContainer{
-    background-color: white;
-    display: flex;
-   justify-content: center;
-    align-items: center;
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
+.btnContainer {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
 }
