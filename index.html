@@ -18,10 +18,47 @@
         />
         <link rel="stylesheet" href="./css/styles.css" />
         <title>NFQ To Do APP</title>
+        <script src="index.js"></script>
     </head>
     <body>
         <header>
-            <h1>NFQ To Do APP</h1>
+            <h1>My To Do List</h1>
         </header>
+        <section id="input-section">
+            <input id="input-box"></input>
+            <button onclick="add_task()"  id="input-button">
+                <i class="fas fa-plus-circle" id="add-button"></i>
+            </button>
+        </section>
+        <section id="tasks-section">
+            <div id="parent-container">
+                
+                <div class="task">
+                    <p class="task-text">sacas</p>
+                    <div class="task-action">
+                        <button class="task-done">
+                            <i class="fas fa-check-circle check-icon"></i>
+                        </button>
+                        <button class="task-delete">
+                            <i class="fas fa-trash trash-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="task">
+                    <p class="task-text">acsaa</p>
+                    <div class="task-action">
+                        <button class="task-done">
+                            <i class="fas fa-check-circle check-icon"></i>
+                        </button>
+                        <button class="task-delete">
+                            <i class="fas fa-trash trash-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
     </body>
 </html>

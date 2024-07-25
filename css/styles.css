@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #c05606;
+    background-color: #7c68ee;
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
@@ -17,4 +17,114 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+
+
+/* Input Section */
+#input-section{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    gap: 10px;
+    height: 150px;
+}
+#input-box{
+    background-color: white;
+    height: 50px;
+    width: 350px;
+    border-radius: 50px;
+    border-style: none;
+    padding: 10px;
+    font-size: 25px;
+  
+}
+#input-button{
+    background-color: white;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    box-shadow: none;
+    border-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#input-button:hover{
+    background-color:#eaeaea;
+}
+#add-button{
+    color: #ffc604;
+    font-size: 250%;
+}
+
+
+
+/* Tasks Section */
+#tasks-section{
+    
+    display: flex;
+    justify-content: center;
+    margin: 60px;
+}
+#parent-container{
+    gap:10px;
+}
+.task{
+    background-color: white;
+    height: 65px;
+    width: 475px;
+    border-radius: 70px;
+    border-style: none;
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: black;
+    margin: 10px;
+}
+.task-text{
+    padding: 10px; 
+}
+.task-action{
+    width: 23%;
+    height: 100%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    display: flex;
+}
+.task-done{
+    border: none;
+    border-style: none;
+    border-radius: 0%;
+    width: 50%;
+    height: auto;
+    cursor: pointer;
+    background-color: #ffc604;
+}
+.task-done:hover{
+    background-color:#ffd23d;
+}
+.check-icon{
+    color: white;
+    font-size: 175%;
+}
+.task-delete{
+    border-style: none;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    width: 50%;
+    height: auto;
+    cursor: pointer;
+    background-color: #ababa9;
+}
+.task-delete:hover{
+    background-color:#eaeaea;
+}
+.trash-icon{
+    color: white;
+    font-size: 175%;
 }
