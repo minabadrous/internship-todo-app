@@ -9,14 +9,153 @@ body {
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; /* Center vertically */
 }
 
+/* Header Styles */
 header {
     font-size: 1.5rem;
-    min-height: 20vh;
+    margin-bottom: 1rem; /* Space between header and container */
+}
+
+/* Container to Center Form and Task List */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    width: 100%;
+    max-width: 30rem; /* Set a max-width to align items properly */
+}
+
+/* Form Styles */
+.box {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
+    width: 100%; /* Ensure full width of container */
+    margin-bottom: 1rem; /* Space between form and task list */
+}
+
+#myTextBox {
+    padding: 0.5rem;
+    font-size: 1.8rem;
+    border: none;
+    background: white;
+    border-radius: 2rem;
+    color: black;
+    width: 100%;
+    max-width: 20rem;
+}
+
+.plus-button {
+    background: rgb(255, 200, 0);
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.plus-button:hover {
+    background: white;
+    color: rgb(255, 200, 0);
+}
+
+/* Select Dropdown Styles */
+.select {
+    margin: 0 1rem; /* Adjust margins */
+    position: relative;
+    overflow: hidden;
+    border-radius: 50px;
+}
+
+.select select {
+    appearance: none;
+    outline: none;
+    border: none;
+    color: rgb(255, 200, 0);
+    width: 10rem;
+    height: 3.2rem;
+    cursor: pointer;
+    padding: 1rem;
+    background: white;
+    border-radius: 2rem;
+    font-size: 1rem;
+}
+
+.select::after {
+    content: "\25BC";
+    position: absolute;
+    background: rgb(255, 200, 0);
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Task List Styles */
+.todo_tasks {
+    width: 100%;
+    max-width: 30rem; 
+}
+
+.to_do_list {
+    list-style: none;
+    width: 100%; 
+}
+
+.task {
+    padding: 0.5rem;
+    font-size: 1.8rem;
+    border: none;
+    background: white;
+    border-radius: 2rem;
+    margin: 0.5rem 0;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Ensure task fills container width */
+}
+
+.task .task-actions {
+    display: flex;
+    align-items: center;
+}
+
+.mark-btn, .delete-btn {
+    margin-left: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.mark-btn {
+    color: green;
+}
+
+.delete-btn {
+    color: red;
+}
+
+.task.completed p {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.to_do_list li p {
+    margin: 0;
+    flex:1;
 }
 .box{
 display: flex;
