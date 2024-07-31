@@ -1,31 +1,78 @@
-const form = document.querySelector("form");
-const input = document.querySelector("input");
-const ul = document.querySelector("ul");
+const model = {
+  todos: [
+    {
+      id: 1,
+      title: "task 1",
+      completed: false,
+      created_at: "",
+      updated_at: "",
+    },
+    {
+      id: 2,
+      title: "task 2",
+      completed: false,
+      created_at: "",
+      updated_at: "",
+    },
+    {
+      id: 39,
+      title: "task 3",
+      completed: false,
+      created_at: "",
+      updated_at: "",
+    },
+  ],
+  addTodo: function (todo) {
+    this.todos.push(todo);
+    view.renderTodo(todo.title);
+  },
+  getTodos: function () {
+    return this.todos;
+  },
+};
 
-form.addEventListener("submit",(e) => {
-    e.preventDefault();
-
-    const item = document.createElement("li");
-    item.className="items";
-    const iteminnerhtml = `<p>${input.value}</p>
+const view = {
+  init: function () {
+    const todos = model.getTodos();
+    todos.forEach((todo) => this.renderTodo(todo.title));
+  },
+  renderTodo: function (title) {
+    const todoElem = `<li><p>${title}</p>
                            <button class="circle check">
                            <i class="fas fa-check-circle"></i>
                            </button>
 
                            <button class="circle delete">
                            <i class="fas fa-trash"></i>
-                           </button>`;
-    
-    item.innerHTML=iteminnerhtml;
-    ul.appendChild(item);
+                           </button></li>`;
+    const todoListElem = document.getElementById("todosList");
 
-    const checkbutton = item.querySelector(".check");
-    checkbutton.addEventListener("click", function () {
-        item.querySelector("p").classList.toggle("done");
-    });
+    todoListElem.innerHTML += todoElem;
+    return;
+  },
+};
 
-    const deletebutton = item.querySelector(".delete");
-    deletebutton.addEventListener("click", function () {
-        item.remove();
+const controller = {
+  init: function () {
+    this.handleAddTodo();
+  },
+  handleAddTodo: function () {
+    const formElem = document.getElementById("myForm");
+    formElem.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const inputElemVal = document.getElementById("in").value;
+      model.addTodo({
+        id: model.getTodos()[model.getTodos().length - 1].id + 1,
+        title: inputElemVal,
+        completed: false,
+        created_at: "",
+        updated_at: "",
+      });
     });
-})
+  },
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  controller.init();
+  view.init();
+});
