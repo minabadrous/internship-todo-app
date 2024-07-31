@@ -5,72 +5,76 @@
 }
 
 body {
-    background-color: #e151a0;
+    background-color: #fc62a7;
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
 }
 
-header {
+header,
+form {
     font-size: 1.5rem;
     min-height: 20vh;
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
-.container {
+form input,
+form button {
+    padding: 0.5rem;
+    padding-left: 1rem;
+    font-size: 1.8rem;
+    border: none;
+    background: white;
+    border-radius: 2rem;
+}
+
+form button {
+    color: rgb(255, 200, 0);
+    background: white;
+    cursor: pointer;
+    transition: all 0.3 ease;
+    margin-left: 0.5rem;
+}
+
+form button:hover {
+
+    color: white;
+    background: rgb(255, 200, 0);
+}
+
+.fa-plus-circle {
+    margin-top: 0.3rem;
+    margin-left: -8px;
+}
+
+.todo-list {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    min-width: 30%;
+    list-style: none;
+    gap: 20px;
 }
 
-#userInput {
-    height: 50px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    width: 25%;
+.listItem {
     display: flex;
-    justify-content: center;
+    min-width: 30%;
+    background-color: white;
+    border-radius: 2rem;
+    min-height: 2rem;
+    color: black;
     align-items: center;
-
+    gap: 15px;
+    padding: 10px;
 }
 
-.circle-bg {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    background-color: rgb(246, 243, 243);
-    border-radius: 50%;
-    margin-left: 10px;
-    gap: 30px;
-
+.listItem p {
+    flex: 1;
 }
 
-.insidecircle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    background-color: rgb(20, 236, 117);
-    border-radius: 50%;
+.isdone {
+    text-decoration: line-through;
 
-}
-
-.insidecircle i {
-    font-size: 20px;
-    color: rgb(255, 250, 250);
-    border-radius: 25px;
-}
-
-.insidecircle:hover {
-    background-color: #475a57;
-    display: flex;
-
-    opacity: 0.6;
-    transition: 0.3s;
 }
