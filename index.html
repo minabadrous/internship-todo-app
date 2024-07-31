@@ -23,33 +23,43 @@
     <header>
       <h1>NFQ To Do APP</h1>
     </header>
-    <section class="tasksSection">
-      <div class="textSlot">
-        <input class="txtField" type="text" id="fname" name="fname" />
+    <section class="tasks-Section">
+      <form id="task-Form" class="text-Slot">
+        <input
+          class="txt-Field"
+          type="text"
+          id="task-Input"
+          name="task-Input"
+        />
         <div class="btnContainer">
-          <button class="btn" type="button"><i class="fas fa-plus"></i></button>
+          <button class="btn" type="submit" id="add-Task-Button">
+            <i class="fas fa-plus"></i>
+          </button>
         </div>
-      </div>
+      </form>
     </section>
-    <section class="tasks">
-      <div class="textSlot">
-        <input class="smalltxtField" type="text" id="fname" name="fname" />
+
+    <ul class="tasks" id="tasks-List">
+      <!-- <li class="textSlot">
+        <div class="smalltxtField" type="text" id="fname" name="fname"></div>
         <button class="doneBtn" type="button">
           <i class="fas fa-check"></i>
         </button>
         <button class="deleteBtn" type="button">
           <i class="fas fa-trash-alt"></i>
         </button>
-      </div>
-      <div class="textSlot">
-        <input class="smalltxtField" type="text" id="fname" name="fname" />
+      </li>
+
+      <li class="textSlot">
+        <div class="smalltxtField" type="text" id="fname" name="fname"></div>
         <button class="doneBtn" type="button">
           <i class="fas fa-check"></i>
         </button>
         <button class="deleteBtn" type="button">
           <i class="fas fa-trash-alt"></i>
         </button>
-      </div>
-    </section>
+      </li> -->
+    </ul>
+    <script src="./script.js"></script>
   </body>
 </html>

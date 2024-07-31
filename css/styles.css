@@ -18,7 +18,7 @@ header {
   justify-content: center;
   align-items: center;
 }
-.tasksSection,
+.tasks-Section,
 .tasks {
   display: flex;
   flex-wrap: wrap;
@@ -26,20 +26,26 @@ header {
   align-items: center;
   margin-top: 100px;
 }
-.textSlot {
+.text-Slot {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
 }
-.txtField {
+.txt-Field {
   height: 50px;
   width: 350px;
   border: black;
   border-width: 20px;
   border-radius: 20px;
   margin-right: 20px;
+  color: black;
+  align-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: larger;
+  padding-left: 10px;
 }
 .btn {
   border-radius: 50%;
@@ -47,8 +53,10 @@ header {
   height: 40px;
   width: 40px;
   font-size: larger;
+  background-color: #dd630b;
+  color: white;
 }
-.smalltxtField {
+.small-txt-Field {
   height: 50px;
   width: 450px;
   border: black;
@@ -58,35 +66,42 @@ header {
   display: inline-block;
   display: flex;
   flex-wrap: wrap;
+  padding-left: 20px;
   border-radius: 20px 0 0 20px;
+  background-color: white;
+  color: black;
+  align-content: center;
+  align-items: center;
+  font-weight: 800;
+  font-size: xx-large;
 }
-.deleteBtn,
-.doneBtn {
+.delete-Btn,
+.done-Btn {
   height: 50px;
   width: 50px;
   background-color: rgb(255, 157, 0);
   border: none;
 }
-.deleteBtn {
+.delete-Btn {
   background-color: rgba(117, 109, 109, 0.959);
   border-radius: 0 20px 20px 0;
 }
-.deleteBtn:hover {
+.delete-Btn:hover {
   background-color: rgba(238, 13, 13, 0.959);
   color: black;
 }
-.doneBtn:hover {
+.done-Btn:hover {
   background-color: #46e403;
 }
 .btn:hover {
-  background-color: #dd630b;
+  background-color: #000000;
   color: white;
 }
 .tasks {
   display: flex;
   flex-direction: column;
 }
-.btnContainer {
+.btn-Container {
   background-color: white;
   display: flex;
   justify-content: center;
