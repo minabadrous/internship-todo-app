@@ -1,91 +1,183 @@
-function addTask(taskText){
-    // Create the <li> element
-    var li = document.createElement('li');
-    li.className = 'taskElement';
 
-    // Create and append the <input> element
-    var input = document.createElement('input');
-    input.name = "taskInput";
-    input.type = 'text';
-    input.className = 'changeText';
-    input.value = taskText;
-    input.readOnly = true;
+const model = {
+    todos: [
+        {
+            id: 1,
+            title: "play",
+            completed: false,
+            created_at: "",
+            updated_at: "",
+        },
+        {
+            id: 2,
+            title: "task 2",
+            completed: false,
+            created_at: "",
+            updated_at: "",
+        },
 
-    // Event Listeners
+    ],
 
-    //console.log(input);
+    addTodo: function (todo){
+        this.todos.push(todo);
+        view.renderTodo(todo);
+    },
 
-    // Action when pressed
-    input.addEventListener('click', () => {
-        console.log("clicked");
-        input.readOnly = false;
-        input.focus();
-    });
+    deleteTodo: function(todoId){
+        this.todos = this.todos.filter(todo => todo.id !== todoId);
+    },
 
+    getTodos: function (){
+        return this.todos;
+    }
 
-    // Action when out of focus
-    input.addEventListener('blur', () => {
+};
+
+const view = {
+    init: function (){
+        const todos = model.getTodos();
+        todos.forEach(todo => this.renderTodo(todo));
+    },
+
+    renderlistElement: function () {
+        const li = document.createElement('li');
+        li.className = 'taskElement';
+
+        return li;
+
+    },
+
+    renderInput: function (todo){
+        const input = document.createElement('input');
+        input.name = "taskInput";
+        input.type = 'text';
+        input.className = 'changeText';
+        input.value = todo.title;
         input.readOnly = true;
-    })
+
+        input.addEventListener('click', () => {
+            console.log("clicked");
+            input.readOnly = false;
+            input.focus();
+        });
+    
+    
+        // Action when out of focus
+        input.addEventListener('blur', () => {
+            input.readOnly = true;
+        })
+
+        return input;
+    },
+
+    renderButtons: function (input,listElement,todo){
+    
+        // Create and append the delete button and icon
+
+        // Create icons 
+        const deleteIcon = document.createElement('i');
+        deleteIcon.className = 'fas fa-trash-alt delete-icon';
+
+        const doneIcon = document.createElement('i');
+        doneIcon.className = 'fas fa-check-circle done-icon';
 
 
-    li.appendChild(input);
 
-    // Create and append the delete button and icon
-    var deleteBtn = document.createElement('button');
-    deleteBtn.className = 'deleteBtn';
-    deleteBtn.addEventListener('click', () =>{
-        li.remove();
-    });
+        // Create Buttons
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'deleteBtn';
 
-    var deleteIcon = document.createElement('i');
-    deleteIcon.className = 'fas fa-trash-alt delete-icon';
+        const doneBtn = document.createElement('button');
+        doneBtn.className = 'doneBtn';
 
-    deleteBtn.appendChild(deleteIcon);
-    li.appendChild(deleteBtn);
 
-    // Create and append the done button and icon
-    var doneBtn = document.createElement('button');
-    doneBtn.className = 'doneBtn';
-    doneBtn.addEventListener('click', () =>{
-        if (input.style.textDecoration != 'line-through'){
-            input.style.textDecoration = 'line-through';
-            input.style.backgroundColor = 'green';
-            input.style.color = 'white';
-        }
-        else{
-            input.style.textDecoration = 'none';
-            input.style.backgroundColor = '#FFFFFF';
-            input.style.color = 'black';
-        }
-    })
 
-    var doneIcon = document.createElement('i');
-    doneIcon.className = 'fas fa-check-circle done-icon';
+        // Adding event listeners to buttons 
+        deleteBtn.addEventListener('click', () =>{
+            listElement.remove();
+            controller.handleDelteTodo(todo.id);
+        });
 
-    doneBtn.appendChild(doneIcon);
-    li.appendChild(doneBtn);
+        doneBtn.addEventListener('click', () =>{
+            if (input.style.textDecoration != 'line-through'){
+                input.style.textDecoration = 'line-through';
+                input.style.backgroundColor = 'green';
+                input.style.color = 'white';
+                todo.completed = true;
 
-    // Append the <li> to an existing element in the DOM
-    const parent = document.getElementById('taskList');
-    parent.insertBefore(li,parent.firstChild);
+            }
+            else{
+                input.style.textDecoration = 'none';
+                input.style.backgroundColor = '#FFFFFF';
+                input.style.color = 'black';
+                todo.completed = false;
+            }
+        });
+    
+        
+    
+        // Adding icons to the buttons 
+        deleteBtn.appendChild(deleteIcon);
 
+        doneBtn.appendChild(doneIcon);
+
+        const buttons = [deleteBtn, doneBtn];
+
+        return buttons;
+    },
+
+    renderTodo: function(todo){
+
+        const listElement = this.renderlistElement();
+
+        const inputField = this.renderInput(todo);
+
+        const buttons = this.renderButtons(inputField,listElement,todo);
+        
+
+        listElement.appendChild(inputField);
+        buttons.forEach(button => listElement.appendChild(button));
+
+        // Append the <li> to an existing element in the DOM
+        const parent = document.getElementById('taskList');
+        parent.insertBefore(listElement,parent.firstChild);
+
+        console.log(model.getTodos());
+    }
 }
 
-document.getElementById("taskForm").addEventListener("submit",(event => {
+const controller = {
+    init: function (){
+        this.handleAddTodo();
+    },
+    handleAddTodo: function (){
+        const formElement = document.getElementById("taskForm");
 
-    event.preventDefault();
+        formElement.addEventListener("submit",(event => {
 
-    const data = new FormData(event.target);
-    const task = data.get("textInput");
+            event.preventDefault();
+        
+            const formData = new FormData(event.target);
+            const taskTitle = formData.get("textInput");
 
+            model.addTodo({
+                id: model.getTodos()[model.getTodos().length -1].id +1,
+                title: taskTitle,
+                completed: false,
+                created_at: Date().toString(),
+                updated_at: Date().toString(),
+            });
+        
+            document.getElementById("mainInput").value = "";
+        }));
+    },
 
-    addTask(task);
+    handleDelteTodo: function (todoId){
+        model.deleteTodo(todoId)
+    }
+}
 
-    // alert(task);
-    // console.log(task);
-
-    // location.reload(true);
-
-    document.getElementById("mainInput").value = "";
-}));
+document.addEventListener("DOMContentLoaded", ()=> {
+    controller.init();
+    view.init()
+})
