@@ -16,10 +16,30 @@
 
 <body>
     <header>
-        <h1>NFQ To Do APP</h1>
+        <h1 id="title">My To-Do List</h1>
     </header>
+    
+    <main>
 
-    <p>Hello I am going to commit and push this</p>
+        
+        <form id="taskAdder">
+            <input type="text" name="task" id="taskInput" placeholder="Enter your task here....">
+            <div id="btnWrapper"><button type="submit" id="addBtn"><i class="fas fa-plus addBtnIcon"></i></button> </div>
+        </form>
+        
+        
+        <section id="todoTaskWrapper">
+            <ul id="todoList">
+                <li class="taskItem">
+                    <p class="taskTitle">TASK</p>
+                    <button class="checkBtn actionBtn" type="button"><i class="fas fa-check-circle" style="color: #ffffff;"></i></i></button>
+                    <button class="delBtn actionBtn" type="button"><i class="fas fa-trash" style="color: #ffffff;"></i></button>
+                </li>
+            </ul>
+        </section>
+
+    </main>
+    <script src="./script.js"></script>
 </body>
 
 </html>
