@@ -25,7 +25,7 @@ function addTask() {
     </button>`;
   taskList.appendChild(newTask);
   taskInput.value = "";
-  //   buttonEvents(newTask);
+  buttonEvents(newTask);
 }
 
 const delFunc = (elem) => {
