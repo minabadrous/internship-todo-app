@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #c05606;
+    background-color: purple;
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
@@ -23,13 +23,14 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 5px;
 }
 
 .Text {
     height: 40px;
     width: 210px;
     border-radius: 25px;
+    background-color: white;
 }
 
 .Submit {
@@ -47,4 +48,64 @@ header {
     height: 35px;
     border-radius: 25px;
     background-color: white;
+}
+
+.List {
+    flex: 1;
+    display: flex;
+    
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+ul {
+    list-style: none;
+}
+
+.Tasks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 25px;
+    color: black;
+    width: 250px;
+}
+
+.TasksListt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 25px;
+    color: black;
+    width: 250px;
+    height: 35px;
+    margin-top: 20px;
+}
+
+.Done {
+    width: 35px;
+    height: 35px;
+    color: white;
+    background-color: yellow;  
+}
+
+.Deletee {
+    width: 35px;
+    height: 35px;
+    background-color: gray; 
+}
+
+.Square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
 }
