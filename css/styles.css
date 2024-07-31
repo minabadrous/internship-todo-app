@@ -5,11 +5,7 @@
 }
 
 body {
-<<<<<<< HEAD
-    background-color: #7C68EE;
-=======
     background-color: #6b13cf;
->>>>>>> origin/dina-pr1
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
@@ -23,133 +19,6 @@ header {
     align-items: center;
 }
 
-<<<<<<< HEAD
-.App-title{
-    display: block;
-}
-
-#taskForm{
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-#mainInput{
-    height: 60px;
-    border-radius: 35px;
-    width: 425px;
-    border: 0px;
-    font-size: 16pt;
-    padding-left: 15px;
-}
-
-input:focus{
-    outline: none;
-}
-
-.add-btn{
-    width: 60px;
-    height: 60px;
-    border-radius: 100%;
-    background-color: #FFFFFF;
-    border: 0px;
-}
-
-#glyph{
-    font-size: 300%;
-    color: #FFC602;
-}
-
-.add-btn:hover{
-    background-color: #FFC602;
-
-    #glyph{
-        color: #FFFFFF;
-        background-color: #FFC602;
-    }
-}
-
-.tasksList{
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    margin-top: 50px;
-    flex-direction: column;
-    gap: 30px;
-
-}
-
-.taskElement{
-    display: flex;
-    justify-content: center;
-    margin-right: 90px;
-}
-
-.changeText{
-    height: 60px;
-    border-radius: 35px 0px 0px 35px;
-    width: 280px;
-    border: 0px;
-    font-size: 16pt;
-    padding-left: 15px;
-}
-
-.deleteBtn{
-    height: 60px;
-    width: 60px;
-    padding: 0px;
-    align-items: center;
-    border: 0px;
-    background-color: red;
-}
-
-.deleteBtn:hover .delete-icon{
-    animation-name: horizontal-shaking ;
-    animation-duration: .25s;
-    animation-iteration-count: 2;
-}
-
-.delete-icon{
-    font-size: 150%;
-    color: #FFFFFF;
-}
-
-.doneBtn{
-    height: 60px;
-    width: 60px;
-    padding: 0px;
-    border: 0px;
-    background-color: #7CB342;
-    border-radius: 0px 35px 35px 0px;
-
-}
-
-.doneBtn:hover .done-icon{
-    animation-name: bounce2;
-    animation-iteration-count: infinite;
-    animation-duration: 1s;
-
-}
-
-.done-icon{
-    font-size: 200%;
-    color: #FFFFFF;
-}
-
-@keyframes horizontal-shaking {
-    0% { transform: translateX(0) }
-    25% { transform: translateX(2px) }
-    50% { transform: translateX(-2px) }
-    75% { transform: translateX(2px) }
-    100% { transform: translateX(0) }
-}
-
-@keyframes bounce2 {
-	0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-	40% {transform: translateY(-10px);}
-	60% {transform: translateY(-5px);}
-=======
 #in{
     height: 50px;
     padding: 1%;
@@ -218,5 +87,4 @@ form button:hover{
 .done{
     text-decoration: line-through;
     text-decoration-thickness: 2pt;
->>>>>>> origin/dina-pr1
 }
