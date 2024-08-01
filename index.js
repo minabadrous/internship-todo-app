@@ -81,7 +81,7 @@ const controller = {
       e.preventDefault();
       const inputElemVal = document.getElementById("in").value;
       model.addTodo({
-        id: model.getTodos()[model.getTodos().length - 1].id + 1,
+        id: (model.getTodos()[model.getTodos().length - 1]?.id ?? 0) + 1,
         title: inputElemVal,
         completed: false,
         created_at: "",
