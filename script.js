@@ -1,12 +1,12 @@
 const form = document.querySelector("form");
 const todoList = document.getElementById("todoList");
-const todoInput = document.getElementById("todoInput");
+const todoInput = document.getElementById("taskInput");
 
 
 
 function addTask() {
-    var taskTitle = taskInput.value;
-
+    var taskTitle = todoInput.value;
+    console.log(taskTitle);
     //************************creating elements********************************//
     // the list item itself
     const newLi = document.createElement("li");
@@ -25,7 +25,7 @@ form.addEventListener("submit", (event) => {
     event.preventDefault();
     console.log("IN EVENT LISTENER.....");
     addTask();
-    taskInput.value = null;
+    todoInput.value = null;
 });
 
 
