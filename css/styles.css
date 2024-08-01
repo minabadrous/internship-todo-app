@@ -5,16 +5,76 @@
 }
 
 body {
-    background-color: #c05606;
+    background-color: #fc62a7;
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
 }
 
-header {
+header,
+form {
     font-size: 1.5rem;
     min-height: 20vh;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+form input,
+form button {
+    padding: 0.5rem;
+    padding-left: 1rem;
+    font-size: 1.8rem;
+    border: none;
+    background: white;
+    border-radius: 2rem;
+}
+
+form button {
+    color: rgb(255, 200, 0);
+    background: white;
+    cursor: pointer;
+    transition: all 0.3 ease;
+    margin-left: 0.5rem;
+}
+
+form button:hover {
+
+    color: white;
+    background: rgb(255, 200, 0);
+}
+
+.fa-plus-circle {
+    margin-top: 0.3rem;
+    margin-left: -8px;
+}
+
+#todosList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 30%;
+    list-style: none;
+    gap: 20px;
+}
+
+li {
+    display: flex;
+    min-width: 30%;
+    background-color: white;
+    border-radius: 2rem;
+    min-height: 2rem;
+    color: black;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+}
+
+li p {
+    flex: 1;
+}
+
+.done {
+    text-decoration: line-through;
+
 }
