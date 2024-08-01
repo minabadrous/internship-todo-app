@@ -24,21 +24,31 @@ const model = {
   ],
   addTodo: function (todo) {
     this.todos.push(todo);
-    view.renderTodo(todo.title);
+    view.renderTodo(todo);
   },
   getTodos: function () {
     return this.todos;
+  },
+  deleteTodo: function (uid) {
+    this.todos = this.todos.filter((todo) => todo.id !== parseInt(uid));
+    view.removeTodo(uid);
+  },
+  checkTodo: function (uid) {
+    const todo = this.todos.find((todo) => todo.id === parseInt(uid));
+    todo.completed = !todo.completed;
+    console.log(this.todos);
+    view.updateTodo(uid);
   },
 };
 
 const view = {
   init: function () {
     const todos = model.getTodos();
-    todos.forEach((todo) => this.renderTodo(todo.title));
+    todos.forEach((todo) => this.renderTodo(todo));
   },
-  renderTodo: function (title) {
-    const todoElem = `<li><p>${title}</p>
-          <button class="check-mark" onclick = "checkFunc(this)">
+  renderTodo: function (todo) {
+    const todoElem = `<li data-uid="${todo.id}"><p>${todo.title}</p>
+          <button class="check-mark" onclick = "controller.handleCheckTodo(this)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
@@ -53,7 +63,7 @@ const view = {
             </svg>
           </button>
 
-          <button class="trash-can" onclick = "delFunc(this)">
+          <button class="trash-can" onclick="controller.handleDeleteTodo(this)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
@@ -71,6 +81,14 @@ const view = {
 
     todoListElem.innerHTML += todoElem;
     return;
+  },
+  removeTodo: function (uid) {
+    const todo = document.querySelector(`[data-uid="${uid}"]`);
+    todo.remove();
+  },
+  updateTodo: function (uid) {
+    const todo = document.querySelector(`[data-uid="${uid}"]`);
+    todo.classList.toggle("done");
   },
 };
 
@@ -91,6 +109,14 @@ const controller = {
         updated_at: "",
       });
     });
+  },
+  handleDeleteTodo: function (elem) {
+    const uid = elem.parentNode.getAttribute("data-uid");
+    model.deleteTodo(uid);
+  },
+  handleCheckTodo: function (elem) {
+    const uid = elem.parentNode.getAttribute("data-uid");
+    model.checkTodo(uid);
   },
 };
 

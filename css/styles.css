@@ -111,4 +111,5 @@ header {
 .done {
   text-decoration: line-through;
   text-decoration-thickness: 3px;
+  color: black;
 }
