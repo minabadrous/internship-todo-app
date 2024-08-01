@@ -30,17 +30,13 @@ const model = {
     return this.todos;
   },
   deleteTodo: function (id) {
-    console.log(id);
     this.todos = this.todos.filter((todo) => todo.id !== parseInt(id));
-    console.log(this.todos);
   },
   updateTodo: function (id) {
-    console.log(id);
     let completedTodo = this.todos.filter((todo) => todo.id === parseInt(id))[0];
     if (completedTodo) {
       completedTodo.completed = !completedTodo.completed;
     }
-    console.log(this.todos)
   }
 };
 
@@ -73,7 +69,6 @@ const controller = {
     const todoInput = document.getElementById("taskInput");
     formElem.addEventListener("submit", function (e) {
       let taskTitle = todoInput.value;
-      console.log(taskTitle);
       e.preventDefault();
       model.addTodo({
         id: model.getTodos()[model.getTodos().length - 1].id + 1,
