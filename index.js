@@ -24,31 +24,50 @@ const model = {
   ],
   addTodo: function (todo) {
     this.todos.push(todo);
-    view.renderTodo(todo.title);
+    view.renderTodo(todo);
   },
   getTodos: function () {
     return this.todos;
   },
+  deleteTodo: function (uid) {
+    this.todos=this.todos.filter((todo) => todo.id !== parseInt(uid));
+    console.log(model.todos);
+    view.delteObject(uid);
+  },
+  checkTodo: function(uid) {
+    const todo =this.todos.find((todo) => todo.id === parseInt(uid));
+    todo.completed = !todo.completed;
+    console.log(this.todos);
+    view.updateTodo(uid);
+  }
 };
 
 const view = {
   init: function () {
     const todos = model.getTodos();
-    todos.forEach((todo) => this.renderTodo(todo.title));
+    todos.forEach((todo) => this.renderTodo(todo));
   },
-  renderTodo: function (title) {
-    const todoElem = `<li><p>${title}</p>
-                           <button class="circle check">
+  renderTodo: function (todo) {
+    const todoElem = `<li data-uid="${todo.id}"><p>${todo.title}</p>
+                           <button onclick="controller.handleCheck(this)" class="circle check">
                            <i class="fas fa-check-circle"></i>
                            </button>
 
-                           <button class="circle delete">
+                           <button onclick="controller.handleDelete(this)" class="circle delete">
                            <i class="fas fa-trash"></i>
                            </button></li>`;
     const todoListElem = document.getElementById("todosList");
 
     todoListElem.innerHTML += todoElem;
     return;
+  },
+  delteObject: function(uid) {
+    const element = document.querySelector(`[data-uid="${uid}"]`);
+    element.remove();
+  },
+  updateTodo: function(uid) {
+    const element = document.querySelector(`[data-uid="${uid}"]`);
+    element.classList.toggle("done");
   },
 };
 
@@ -70,6 +89,14 @@ const controller = {
       });
     });
   },
+  handleDelete: function(element) {
+    const uid = element.parentNode.getAttribute("data-uid");
+    model.deleteTodo(uid);
+  },
+  handleCheck: function(element) {
+    const uid = element.parentNode.getAttribute("data-uid");
+    model.checkTodo(uid);
+  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
