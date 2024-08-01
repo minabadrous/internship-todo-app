@@ -1,93 +1,92 @@
-
-        document.getElementById('add-task').addEventListener('click', function() {
-            const taskInput = document.getElementById('new-task');
-            const task = taskInput.value.trim();
-            if (task) {
-                addTask(task);
-                taskInput.value = ''; // Clear the input field
-            }
-        });
-
-        function addTask(task) {
-            const taskList = document.getElementById('task-list');
-            const listItem = document.createElement('li');
-            listItem.className = 'task-item';
-
-            const taskText = document.createElement('span');
-            taskText.textContent = task;
-
-            const completeButton = document.createElement('button');
-            completeButton.className = 'complete-task';
-            completeButton.innerHTML = '<i class="fas fa-check"></i>';
-            completeButton.addEventListener('click', function() {
-                taskText.style.textDecoration = 'line-through';
-            });
-
-            const deleteButton = document.createElement('button');
-            deleteButton.className = 'delete-task';
-            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-            deleteButton.addEventListener('click', function() {
-                taskList.removeChild(listItem);
-            });
-
-            listItem.appendChild(taskText);
-            listItem.appendChild(completeButton);
-            listItem.appendChild(deleteButton);
-
-            taskList.appendChild(listItem);
-        }
-    
 const model = {
   todos: [
     {
       id: 1,
       title: "task 1",
       completed: false,
-      created_at: "",
-      updated_at: "",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     },
     {
       id: 2,
       title: "task 2",
       completed: false,
-      created_at: "",
-      updated_at: "",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     },
     {
-      id: 39,
+      id: 3,
       title: "task 3",
       completed: false,
-      created_at: "",
-      updated_at: "",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     },
   ],
+  nextId: 4, // Next ID to be used
+
   addTodo: function (todo) {
     this.todos.push(todo);
-    view.renderTodo(todo.title);
+    this.nextId++; // Increment the next ID
+    view.renderTodos(this.todos); // Render all todos to reflect new addition
   },
   getTodos: function () {
     return this.todos;
+  },
+  updateTodo: function (id, updatedProperties) {
+    const todo = this.todos.find(todo => todo.id === id);
+    if (todo) {
+      Object.assign(todo, updatedProperties);
+      todo.updated_at = new Date().toISOString();
+      view.renderTodos(this.todos);
+    }
+  },
+  deleteTodo: function (id) {
+    this.todos = this.todos.filter(todo => todo.id !== id);
+    view.renderTodos(this.todos);
   },
 };
 
 const view = {
   init: function () {
     const todos = model.getTodos();
-    todos.forEach((todo) => this.renderTodo(todo.title));
+    todos.forEach((todo) => this.renderTodo(todo));
   },
-  renderTodo: function (title) {
-    const todoElem = `<li><p>${title}</p>
-                           <button class="circle check">
-                           <i class="fas fa-check-circle"></i>
-                           </button>
+  renderTodo: function (todo) {
+    const todoListElem = document.getElementById("task-list");
+    const listItem = document.createElement('li');
+    listItem.className = 'task-item';
+    listItem.dataset.id = todo.id;
 
-                           <button class="circle delete">
-                           <i class="fas fa-trash"></i>
-                           </button></li>`;
-    const todoListElem = document.getElementById("todosList");
+    const taskText = document.createElement('span');
+    taskText.textContent = todo.title;
+    if (todo.completed) {
+      taskText.style.textDecoration = 'line-through';
+    }
 
-    todoListElem.innerHTML += todoElem;
-    return;
+    const completeButton = document.createElement('button');
+    completeButton.className = 'complete-task';
+    completeButton.innerHTML = '<i class="fas fa-check"></i>';
+    completeButton.addEventListener('click', function () {
+      model.updateTodo(todo.id, { completed: !todo.completed });
+    });
+
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'delete-task';
+    deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+    deleteButton.addEventListener('click', function () {
+      model.deleteTodo(todo.id);
+    });
+
+    listItem.appendChild(taskText);
+    listItem.appendChild(completeButton);
+    listItem.appendChild(deleteButton);
+
+    todoListElem.appendChild(listItem);
+  },
+  renderTodos: function (todos) {
+    const todoListElem = document.getElementById("task-list");
+    todoListElem.innerHTML = '';
+    todos.forEach((todo) => this.renderTodo(todo));
   },
 };
 
@@ -96,17 +95,21 @@ const controller = {
     this.handleAddTodo();
   },
   handleAddTodo: function () {
-    const formElem = document.getElementById("myForm");
+    const formElem = document.querySelector("form");
     formElem.addEventListener("submit", function (e) {
       e.preventDefault();
-      const inputElemVal = document.getElementById("in").value;
-      model.addTodo({
-        id: model.getTodos()[model.getTodos().length - 1].id + 1,
-        title: inputElemVal,
-        completed: false,
-        created_at: "",
-        updated_at: "",
-      });
+      const inputElemVal = document.getElementById("new-task").value;
+      if (inputElemVal.trim()) {
+        const newTodo = {
+          id: model.nextId,
+          title: inputElemVal,
+          completed: false,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        model.addTodo(newTodo);
+        document.getElementById("new-task").value = '';
+      }
     });
   },
 };
