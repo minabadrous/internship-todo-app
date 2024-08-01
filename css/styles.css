@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #c05606;
+    background-color: #7f02c7;
     color: white;
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
@@ -18,3 +18,128 @@ header {
     justify-content: center;
     align-items: center;
 }
+
+#title{
+    margin: 2rem;
+}
+
+#taskAdder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:2rem
+}
+
+#taskInput:focus {
+    background-color: lightyellow;
+    outline: none; /* Optional: to remove the default outline */
+}
+
+#taskInput{
+    border-radius: 2rem;
+    padding: 1rem; 
+    border: none;
+    width: 20rem;
+
+}
+
+#addBtn{
+    border-radius: 50%;
+    border: none;
+    padding: 0.35rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: rgb(33, 15, 70);
+
+}
+
+
+#btnWrapper:hover {
+    background-color: rgb(33, 15, 70);;
+}
+
+#btnWrapper:hover #addBtn {
+    background-color: white;
+    cursor: pointer;
+}
+
+#btnWrapper:hover .addBtnIcon {
+    color: rgb(33, 15, 70);;
+}
+
+.addBtnIcon{
+    font-size: 20px;
+    color: whitesmoke;
+}
+
+#btnWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
+    border-radius: 2rem;
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+
+
+
+#todoTaskWrapper{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+#todoList{
+    margin: 2rem;
+    width: 20rem;
+}
+
+.taskItem{
+    margin:1rem;
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr;
+    gap: 0.5rem;
+    border-radius: 2rem;
+    padding: 1rem;
+    background-color: lightgoldenrodyellow;
+    justify-content: center;
+    align-items: center;
+}
+
+.taskTitle{
+    font-size: 18px;
+    color: rgb(33, 15, 70);
+}
+
+.actionBtn{
+    border-radius: 2rem;
+    border: none;
+    padding: 0.5rem;
+}
+
+.checkBtn{
+    background-color: rgb(33, 15, 70);
+    &:hover{
+        background-color: #6410EC;
+    }
+    
+}
+
+
+.delBtn{
+    background-color: rgb(33, 15, 70,0.5);
+    &:hover{
+        background-color: #6410EC;
+    }
+}
+
+
+.done{
+    text-decoration: line-through;
+    color: rgb(33, 15, 70,0.5);
+    background-color: rgba(250, 250, 210, 0.226);
+    
+}
+
