@@ -36,13 +36,13 @@ const model = {
   },
   updateTodo: function (id) {
     console.log(id);
-    let completedTodo = this.todos.filter((todo) => todo.id === parseInt(id));
+    let completedTodo = this.todos.filter((todo) => todo.id === parseInt(id))[0];
     console.log(`BEFORE ${completedTodo.completed}`);
-
     if (completedTodo) {
       completedTodo.completed = !completedTodo.completed;
       console.log(`AFTER ${completedTodo.completed}`);
     }
+    console.log(this.todos)
   }
 };
 
