@@ -66,10 +66,7 @@ updateTodo: function (id) {
 }
 };
 
-// cake on me 
-// kidding
-// install VBLock
-//it will save you cakes
+
 
 
 // View
