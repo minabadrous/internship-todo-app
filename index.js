@@ -1,43 +1,25 @@
+// Form submission event handler
 document.querySelector('form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const taskInput = document.getElementById('myTextBox');
-    const taskText = taskInput.value.trim();
-    
-    if (taskText) {
-        
-        const newTask = document.createElement('li');
-        newTask.classList.add('task');
-        
-        
-        const elementInnerHTML = `
-            <p>${taskText}</p>
-            <button class="mark-btn"><i class="fas fa-check"></i></button>
-            <button class="delete-btn"><i class="fas fa-trash"></i></button>
-        `;
-        
-        
-        newTask.innerHTML = elementInnerHTML;
-        
-        
-        const taskList = document.querySelector('.to_do_list');
-        if (taskList) {
-            taskList.appendChild(newTask);
-        }
-        
-        
-        taskInput.value = '';
-        
-        
-        newTask.querySelector('.mark-btn').addEventListener('click', function() {
-            newTask.classList.toggle('completed');
-        });
+  event.preventDefault();
+  
+  const taskInput = document.getElementById('myTextBox');
+  const taskText = taskInput.value.trim();
+  
+  if (taskText) {
+      const newTodo = {
+          id: model.getTodos().length ? model.getTodos()[model.getTodos().length - 1].id + 1 : 1,
+          title: taskText,
+          completed: false,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+      };
 
-        newTask.querySelector('.delete-btn').addEventListener('click', function() {
-            taskList.removeChild(newTask);
-        });
-    }
+      model.addTodo(newTodo);
+      taskInput.value = '';
+  }
 });
+
+// Model
 const model = {
   todos: [
     {
@@ -62,57 +44,119 @@ const model = {
       updated_at: "",
     },
   ],
-  addTodo: function (todo) {
-    this.todos.push(todo);
-    view.renderTodo(todo.title);
-  },
-  getTodos: function () {
-    return this.todos;
-  },
+addTodo: function (todo) {
+  this.todos.push(todo);
+  view.renderTodo(todo);
+},
+
+
+getTodos: function () {
+  return this.todos;
+},
+removeTodo: function (id) {
+  this.todos = this.todos.filter(todo => todo.id !== id);
+},
+updateTodo: function (id) {
+  const todo = this.getTodos().find(todo => todo.id === id);
+  console.log(` ${todo.completed}`)
+  if (todo) {
+      todo.completed = !todo.completed;
+  }
+  view.handleselectors(id); // Update view
+}
 };
 
+// cake on me 
+// kidding
+// install VBLock
+//it will save you cakes
+
+
+// View
 const view = {
-  init: function () {
-    const todos = model.getTodos();
-    todos.forEach((todo) => this.renderTodo(todo.title));
-  },
-  renderTodo: function (title) {
-    const todoElem = `<li><p>${title}</p>
-                           <button class="circle check">
-                           <i class="fas fa-check-circle"></i>
-                           </button>
+init: function () {
+  this.renderTodos();
+  this.setupEventListeners();
+},
+renderTodos: function () {
+  const todos = model.getTodos();
+  todos.forEach((todo) => this.renderTodo(todo));
+},
+renderTodo: function (todo) {
+  const todoElem = document.createElement('li');
+  todoElem.classList.add('task');
+  if (todo.completed) {
+    todoElem.classList.add('completed');
+  }
 
-                           <button class="circle delete">
-                           <i class="fas fa-trash"></i>
-                           </button></li>`;
-    const todoListElem = document.getElementById("todosList");
-
-    todoListElem.innerHTML += todoElem;
-    return;
-  },
-};
-
-const controller = {
-  init: function () {
-    this.handleAddTodo();
-  },
-  handleAddTodo: function () {
-    const formElem = document.getElementById("myForm");
-    formElem.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const inputElemVal = document.getElementById("in").value;
-      model.addTodo({
-        id: model.getTodos()[model.getTodos().length - 1].id + 1,
+  todoElem.dataset.id = todo.id;
+  todoElem.innerHTML = `
+    <p>${todo.title}</p>
+    <button class="mark-btn"><i class="fas fa-check"></i></button>
+    <button class="delete-btn"><i class="fas fa-trash"></i></button>
+  `;
+  todoElem.querySelector('.mark-btn').addEventListener('click', () => {
+    controller.handleMarkTodoAsCompleted(todo.id);
+  });
+  todoElem.querySelector('.delete-btn').addEventListener('click', () => {
+    controller.handleDeleteTodo(todo.id);
+  });
+  document.querySelector('#todosList').appendChild(todoElem);
+},
+setupEventListeners: function () {
+  const formElem = document.getElementById('myForm');
+  formElem.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const inputElemVal = document.getElementById('myTextBox').value.trim();
+    if (inputElemVal) {
+      const newTodo = {
+        id: model.getTodos().length ? model.getTodos()[model.getTodos().length - 1].id + 1 : 1,
         title: inputElemVal,
         completed: false,
-        created_at: "",
-        updated_at: "",
-      });
-    });
-  },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      model.addTodo(newTodo);
+      document.getElementById('myTextBox').value = ''; 
+    }
+  });
+},
+
+handleselectors: function (id) {
+  document.querySelectorAll('#todosList .task').forEach((taskElem) => {
+    if (parseInt(taskElem.dataset.id) === id) {
+      const todo = model.getTodos().find(todo => todo.id === id);
+      taskElem.classList.toggle('completed', todo.completed);
+    }
+  });
+}
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  controller.init();
+// Controller
+const controller = {
+init: function () {
   view.init();
+},
+
+handleMarkTodoAsCompleted: function (id) {
+  model.updateTodo(id);
+},
+
+
+
+handleDeleteTodo: function (id) {
+  model.removeTodo(id);
+  document.querySelectorAll('#todosList .task').forEach((taskElem) => {
+    if (parseInt(taskElem.dataset.id) === id) {
+      taskElem.remove();
+    }
+  });
+}
+};
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+controller.init();
 });
