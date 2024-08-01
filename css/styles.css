@@ -1,20 +1,115 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: #c05606;
-    color: white;
-    font-family: "Poppins", sans-serif;
-    min-height: 100vh;
+  background-color: blue;
+  color: rgb(116, 192, 252);
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
 }
 
 header {
-    font-size: 1.5rem;
-    min-height: 20vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  font-size: 1.5rem;
+  min-height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#form-header {
+  display: flex;
+  justify-content: center;
+}
+
+#form-header form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#todo-input {
+  border-radius: 25px;
+  padding-left: 5px;
+  width: 250px;
+  height: 40px;
+  font-size: 15pt;
+  font-family: "Poppins", sans-serif;
+}
+
+#todo-button {
+  background-color: lightyellow;
+  border: solid;
+  border-color: rgb(116, 192, 252);
+  border-width: 6px;
+  border-radius: 100%;
+  padding: 3px;
+  width: 40px;
+  height: 40px;
+}
+
+#todo-button:hover {
+  background-color: rgb(116, 192, 252);
+  border: solid;
+  border-color: lightyellow;
+  border-width: 6px;
+  border-radius: 100%;
+  padding: 3px;
+  width: 40px;
+  height: 40px;
+}
+
+#task-container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+#task-container p {
+  flex: 1;
+  color: black;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  align-items: center;
+  font-size: 15pt;
+}
+
+.trash-can {
+  background-color: red;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding-top: 5px;
+  padding-right: 7px;
+}
+
+.check-mark {
+  background-color: greenyellow;
+  color: black;
+  font-family: "Poppins", sans-serif;
+  padding-top: 5px;
+}
+
+#task-container ul {
+  list-style: none;
+  width: 300px;
+}
+
+#task-container li {
+  list-style: none;
+  display: flex;
+  margin-top: 20px;
+  border-radius: 25px;
+  background-color: white;
+  padding-left: 5px;
+}
+
+.done {
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+  color: black;
 }

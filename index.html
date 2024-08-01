@@ -1,27 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
-            rel="stylesheet"
-        />
-        <!-- Font Awesome cdn css -->
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-            integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-        />
-        <link rel="stylesheet" href="./css/styles.css" />
-        <title>NFQ To Do APP</title>
-    </head>
-    <body>
-        <header>
-            <h1>NFQ To Do APP</h1>
-        </header>
-    </body>
+  <head>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome cdn css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <title>NFQ To Do APP</title>
+  </head>
+  <body>
+    <header>
+      <h1>NFQ To Do APP</h1>
+    </header>
+
+    <div id="form-header">
+      <form id="myForm" action="">
+        <input id="todo-input" type="text" />
+        <button id="todo-button" type="submit">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            width="21"
+            viewBox="0 0 448 512"
+          >
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path
+              fill="#74C0FC"
+              d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"
+            />
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <div id="task-container">
+      <ul id="todosList"></ul>
+    </div>
+  </body>
+  <script src="./index.js"></script>
 </html>
