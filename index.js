@@ -27,9 +27,11 @@ const model = {
     await this.fetchTodos(); // Fetch and initialize todos
   },
 
+
+  
   addTodo: function (todo) {
     todo.title = todo.title || 'New Task';
-    
+
     this.todos.push(todo);
     view.renderTodo(todo);
   },
