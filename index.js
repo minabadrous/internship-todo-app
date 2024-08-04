@@ -4,30 +4,15 @@ const model = {
     this.todos = todos;
   },
   todos: [],
-  addTodo: async function (todo) {
-    const response = await fetch("http://127.0.0.1:8000/api/todos", {
-      method: "POST",
-      body: JSON.stringify({ title: todo.title, completed: false }),
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) => response.json())
-      .then((data) => data.todo)
-      .catch((error) => console.log(error));
-
-    this.todos.push(response);
-    view.renderTodo(response);
-    console.log(response);
+  addTodo: function (todo) {
+    console.log(todo);
+    this.todos.push(todo);
+    view.renderTodo(todo);
   },
   getTodos: function () {
     return this.todos;
   },
   deleteTodo: function (uid) {
-    fetch("http://127.0.0.1:8000/api/todos/" + uid, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      // .then((data) => data.todo)
-      .then((res) => console.log(res));
     this.todos = this.todos.filter((todo) => todo.id !== parseInt(uid));
     view.removeTodo(uid);
     console.log(this.todos);
@@ -55,7 +40,7 @@ const view = {
   },
   renderTodo: function (todo) {
     const todoElem = `<li data-uid="${todo.id}"><p>${todo.title}</p>
-          <button class="check-mark" onclick = "controller.handleCheckTodo(this)">
+          <button class="check-mark" onclick = "controller.handleCheckTodo(${todo.id})">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
@@ -70,7 +55,7 @@ const view = {
             </svg>
           </button>
 
-          <button class="trash-can" onclick="controller.handleDeleteTodo(this)">
+          <button class="trash-can" onclick="controller.handleDeleteTodo(${todo.id})">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
@@ -107,26 +92,49 @@ const controller = {
     const formElem = document.getElementById("myForm");
     formElem.addEventListener("submit", function (e) {
       e.preventDefault();
-      const inputElemVal = document.getElementById("todo-input").value;
+      const inputElem = document.getElementById("todo-input");
 
-      model.addTodo({
-        id: model.getTodos().length
-          ? model.getTodos()[model.getTodos().length - 1].id + 1
-          : 1,
-        title: inputElemVal,
+      const newTodo = {
+        title: inputElem.value,
         completed: false,
-        created_at: "",
-        updated_at: "",
-      });
+      };
+
+      inputElem.value = "";
+
+      controller.handlePostTodo(newTodo);
     });
   },
-  handleDeleteTodo: function (elem) {
-    const uid = elem.parentNode.getAttribute("data-uid");
-    model.deleteTodo(uid);
+  handleDeleteTodo: async function (uid) {
+    fetch(`http://127.0.0.1:8000/api/todos/${uid}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (res.ok) {
+          model.deleteTodo(uid);
+          return res.json();
+        }
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
   },
-  handleCheckTodo: function (elem) {
-    const uid = elem.parentNode.getAttribute("data-uid");
+  handleCheckTodo: function (uid) {
     model.checkTodo(uid);
+  },
+  handlePostTodo: async function (todo) {
+    return await fetch("http://127.0.0.1:8000/api/todos", {
+      method: "POST",
+      body: JSON.stringify(todo),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .then((data) => {
+        model.addTodo(data.todo);
+      })
+      .catch((error) => console.log(error));
   },
 };
 
