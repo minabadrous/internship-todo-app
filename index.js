@@ -13,16 +13,24 @@ const model = {
       .then((response) => response.json())
       .then((data) => data.todo)
       .catch((error) => console.log(error));
- 
-    model.todos.push(response);
+
+    this.todos.push(response);
     view.renderTodo(response);
+    console.log(response);
   },
   getTodos: function () {
     return this.todos;
   },
   deleteTodo: function (uid) {
+    fetch("http://127.0.0.1:8000/api/todos/" + uid, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      // .then((data) => data.todo)
+      .then((res) => console.log(res));
     this.todos = this.todos.filter((todo) => todo.id !== parseInt(uid));
     view.removeTodo(uid);
+    console.log(this.todos);
   },
   checkTodo: function (uid) {
     const todo = this.todos.find((todo) => todo.id === parseInt(uid));
@@ -100,8 +108,11 @@ const controller = {
     formElem.addEventListener("submit", function (e) {
       e.preventDefault();
       const inputElemVal = document.getElementById("todo-input").value;
+
       model.addTodo({
-        id: model.getTodos()[model.getTodos().length - 1].id + 1,
+        id: model.getTodos().length
+          ? model.getTodos()[model.getTodos().length - 1].id + 1
+          : 1,
         title: inputElemVal,
         completed: false,
         created_at: "",
