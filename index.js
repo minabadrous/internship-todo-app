@@ -17,7 +17,7 @@ const model = {
     const index = this.todos.findIndex((t) => t.id === id);
     if (index > -1) {
       this.todos.splice(index, 1);
-      await this.deleteTodoFromServer(id);
+
       view.renderAllTodos();
     }
   },
@@ -25,7 +25,7 @@ const model = {
     const todo = this.todos.find((t) => t.id === id);
     if (todo) {
       todo.Completed = true;
-      await this.updateTodoOnServer(todo);
+
       view.renderAllTodos();
     }
   },
@@ -38,36 +38,6 @@ const model = {
     })
       .then((res) => res.json())
       .then((data) => data.todos)
-      .catch((error) => console.log(error));
-  },
-  deleteTodoFromServer: async function (id) {
-    return await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .catch((error) => console.log(error));
-  },
-  updateTodoOnServer: async function (todo) {
-    return await fetch(`http://127.0.0.1:8000/api/todos/${todo.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(todo),
-    })
-      .then((res) => res.json())
-      .catch((error) => console.log(error));
-  },
-  saveTodoToServer: async function (todo) {
-    return await fetch("http://127.0.0.1:8000/api/todos", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(todo),
-    })
-      .then((res) => res.json())
-      .then((data) => data.todo)
       .catch((error) => console.log(error));
   },
 };
