@@ -6,33 +6,8 @@ const model = {
     view.renderTodos(this.todos);
   },
 
-  addTodo: async function(todo) {
-    const addedTodo = await this.postMethod(todo);
-    if (addedTodo) {
-      this.todos.push(addedTodo);
-      view.renderTodos(this.todos);
-    }
-  },
-
   getTodos: function() {
     return this.todos;
-  },
-
-  updateTodo: function(id, updatedProperties) {
-    const todo = this.todos.find(todo => todo.id === id);
-    if (todo) {
-      Object.assign(todo, updatedProperties);
-      todo.updated_at = new Date().toISOString();
-      view.renderTodos(this.todos);
-    }
-  },
-
-  deleteTodo: async function(id) {
-    const isDeleted = await this.deleteMethod(id);
-    if (isDeleted) {
-      this.todos = this.todos.filter(todo => todo.id !== id);
-      view.renderTodos(this.todos);
-    }
   },
 
   fetchTodos: async function() {
@@ -46,6 +21,136 @@ const model = {
     }
   },
 
+  updateTodo: function(id, completed) {
+    const todo = this.todos.find(todo => todo.id === id);
+    if (todo) {
+      todo.completed = completed;
+      view.updateTodoView(id, completed);
+    }
+  },
+};
+
+const view = {
+  init: function() {
+    this.setupContextMenu();
+    this.setupNetworkStatus();
+  },
+
+  renderTodo: function(todo) {
+    const todoElem = `
+      <li data-uid="${todo.id}" class="task-item ${todo.completed ? 'done' : ''}">
+        <p>${todo.title}</p>
+        <button onclick="controller.handleCheck(${todo.id})" class="circle complete-task">
+          <i class="fas fa-check-circle"></i>
+        </button>
+        <button onclick="controller.handleDeleteTodo(${todo.id})" class="circle delete-task">
+          <i class="fas fa-trash"></i>
+        </button>
+      </li>`;
+    const todoListElem = document.getElementById("todosList");
+
+    todoListElem.innerHTML += todoElem;
+  },
+
+  renderTodos: function(todos) {
+    const todoListElem = document.getElementById("todosList");
+    todoListElem.innerHTML = '';
+    todos.forEach(todo => this.renderTodo(todo));
+  },
+
+  updateTodoView: function(id, completed) {
+    const todoElem = document.querySelector(`li[data-uid='${id}']`);
+    if (todoElem) {
+      todoElem.classList.toggle('done', completed);
+    }
+  },
+
+  setupContextMenu: function() {
+    document.getElementById("todosList").addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      const listItem = e.target.closest('li');
+      if (listItem) {
+        const id = parseInt(listItem.getAttribute('data-uid'), 10);
+        controller.handleCheck(id);
+      }
+    });
+  },
+
+  setupNetworkStatus: function() {
+    const statusElem = document.getElementById("networkStatus");
+
+    const updateNetworkStatus = () => {
+      if (!navigator.onLine) {
+        statusElem.textContent = "You are offline. Some features may not be available.";
+        statusElem.style.display = "block";
+      } else {
+        statusElem.textContent = "";
+        statusElem.style.display = "none";
+      }
+    };
+
+    window.addEventListener("online", updateNetworkStatus);
+    window.addEventListener("offline", updateNetworkStatus);
+
+    updateNetworkStatus(); 
+  }
+};
+
+const controller = {
+  init: function() {
+    this.handleAddTodo();
+  },
+
+  handleAddTodo: function() {
+    const formElem = document.querySelector("form");
+    formElem.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const inputElemVal = document.getElementById("in").value;
+      if (inputElemVal.trim()) {
+        const newTodo = {
+          title: inputElemVal,
+          completed: false,
+        };
+        await controller.postMethod(newTodo);
+        document.getElementById("in").value = '';
+      }
+    });
+  },
+
+  handleCheck: async function(id) {
+    const todo = model.todos.find(todo => todo.id === id);
+    if (todo) {
+      const buttonElem = document.querySelector(`li[data-uid='${id}'] .complete-task`);
+      buttonElem.disabled = true;
+      await controller.handleUpdateTodo(id, { completed: !todo.completed });
+      buttonElem.disabled = false;
+    }
+  },
+
+  handleUpdateTodo: async function(id, updatedProperties) {
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedProperties)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        model.updateTodo(id, data.completed);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  handleDeleteTodo: async function(id) {
+    const isDeleted = await this.deleteMethod(id);
+    if (isDeleted) {
+      model.todos = model.todos.filter(todo => todo.id !== id);
+      view.renderTodos(model.todos);
+    }
+  },
+
   postMethod: async function(todo) {
     try {
       const res = await fetch("http://127.0.0.1:8000/api/todos", {
@@ -56,10 +161,13 @@ const model = {
         body: JSON.stringify(todo)
       });
       const data = await res.json();
-      return data.todo;
+
+      if (data.todo) {
+        model.todos.push(data.todo);
+        view.renderTodo(data.todo);
+      }
     } catch (error) {
       console.log(error);
-      return null;
     }
   },
 
@@ -76,78 +184,8 @@ const model = {
   }
 };
 
-const view = {
-  init: function() {
-    // Not needed as todos are rendered in model.init
-  },
-
-  renderTodo: function(todo) {
-    const todoListElem = document.getElementById("task-list");
-    const listItem = document.createElement('li');
-    listItem.className = 'task-item';
-    listItem.dataset.id = todo.id;
-
-    const taskText = document.createElement('span');
-    taskText.textContent = todo.title;
-    if (todo.completed) {
-      taskText.style.textDecoration = 'line-through';
-    }
-
-    const completeButton = document.createElement('button');
-    completeButton.className = 'complete-task';
-    completeButton.innerHTML = '<i class="fas fa-check"></i>';
-    completeButton.addEventListener('click', function() {
-      model.updateTodo(todo.id, { completed: !todo.completed });
-    });
-
-    const deleteButton = document.createElement('button');
-    deleteButton.className = 'delete-task';
-    deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-    deleteButton.addEventListener('click', function() {
-      model.deleteTodo(todo.id);
-    });
-
-    listItem.appendChild(taskText);
-    listItem.appendChild(completeButton);
-    listItem.appendChild(deleteButton);
-
-    todoListElem.appendChild(listItem);
-  },
-
-  renderTodos: function(todos) {
-    const todoListElem = document.getElementById("task-list");
-    todoListElem.innerHTML = '';
-    todos
-      .filter(todo => todo.title !== "test2")
-      .forEach(todo => this.renderTodo(todo));
-  }
-};
-
-const controller = {
-  init: function() {
-    this.handleAddTodo();
-  },
-
-  handleAddTodo: function() {
-    const formElem = document.querySelector("form");
-    formElem.addEventListener("submit", async function(e) {
-      e.preventDefault();
-      const inputElemVal = document.getElementById("new-task").value;
-      if (inputElemVal.trim()) {
-        const newTodo = {
-          title: inputElemVal,
-          completed: false,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        };
-        await model.addTodo(newTodo);
-        document.getElementById("new-task").value = '';
-      }
-    });
-  }
-};
-
 document.addEventListener("DOMContentLoaded", async () => {
   await model.init();
+  view.init();
   controller.init();
 });

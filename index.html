@@ -5,7 +5,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-    <!-- Font Awesome cdn css -->
+    <!-- Font Awesome CDN CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./css/styles.css" />
     <title>NFQ To Do APP</title>
@@ -14,15 +14,16 @@
     <header>
         <h1>NFQ To Do APP</h1>
     </header>
-    <main>
-        <form action="" class="task-input">
-            <input type="text" id="new-task" placeholder="Enter new task" />
-            <button id="add-task" type="submit">
-                <i class="fas fa-plus"></i>
-            </button>
-        </form>
-        <ul id="task-list"></ul>
-    </main>
+    <form id="myForm" action="">
+        <input type="text" id="in" />
+        <button class="circle" type="submit">
+            <i class="fas fa-plus-circle fa-lg" id="plus"></i>
+        </button>
+    </form>
+    <div class="container">
+        <ul id="todosList" class="list"></ul>
+    </div>
+    <div id="networkStatus" style="display: none; color: red;"></div>
     <script src="./index.js"></script>
 </body>
 </html>
