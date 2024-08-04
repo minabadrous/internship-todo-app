@@ -1,38 +1,24 @@
 const model = {
-  todos: [
-    {
-      id: 1,
-      title: "task 1",
-      completed: false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 2,
-      title: "task 2",
-      completed: false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 3,
-      title: "task 3",
-      completed: false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ],
-  nextId: 4, // Next ID to be used
+  todos: [],
 
-  addTodo: function (todo) {
-    this.todos.push(todo);
-    this.nextId++; // Increment the next ID
-    view.renderTodos(this.todos); // Render all todos to reflect new addition
+  init: async function() {
+    await this.fetchTodos();
+    view.renderTodos(this.todos);
   },
-  getTodos: function () {
+
+  addTodo: async function(todo) {
+    const addedTodo = await this.postMethod(todo);
+    if (addedTodo) {
+      this.todos.push(addedTodo);
+      view.renderTodos(this.todos);
+    }
+  },
+
+  getTodos: function() {
     return this.todos;
   },
-  updateTodo: function (id, updatedProperties) {
+
+  updateTodo: function(id, updatedProperties) {
     const todo = this.todos.find(todo => todo.id === id);
     if (todo) {
       Object.assign(todo, updatedProperties);
@@ -40,18 +26,62 @@ const model = {
       view.renderTodos(this.todos);
     }
   },
-  deleteTodo: function (id) {
-    this.todos = this.todos.filter(todo => todo.id !== id);
-    view.renderTodos(this.todos);
+
+  deleteTodo: async function(id) {
+    const isDeleted = await this.deleteMethod(id);
+    if (isDeleted) {
+      this.todos = this.todos.filter(todo => todo.id !== id);
+      view.renderTodos(this.todos);
+    }
   },
+
+  fetchTodos: async function() {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/todos");
+      const data = await res.json();
+      this.todos = data.todos || [];
+    } catch (error) {
+      console.log(error);
+      this.todos = [];
+    }
+  },
+
+  postMethod: async function(todo) {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/todos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(todo)
+      });
+      const data = await res.json();
+      return data.todo;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+
+  deleteMethod: async function(id) {
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+        method: "DELETE"
+      });
+      return res.ok;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
 };
 
 const view = {
-  init: function () {
-    const todos = model.getTodos();
-    todos.forEach((todo) => this.renderTodo(todo));
+  init: function() {
+    // Not needed as todos are rendered in model.init
   },
-  renderTodo: function (todo) {
+
+  renderTodo: function(todo) {
     const todoListElem = document.getElementById("task-list");
     const listItem = document.createElement('li');
     listItem.className = 'task-item';
@@ -66,14 +96,14 @@ const view = {
     const completeButton = document.createElement('button');
     completeButton.className = 'complete-task';
     completeButton.innerHTML = '<i class="fas fa-check"></i>';
-    completeButton.addEventListener('click', function () {
+    completeButton.addEventListener('click', function() {
       model.updateTodo(todo.id, { completed: !todo.completed });
     });
 
     const deleteButton = document.createElement('button');
     deleteButton.className = 'delete-task';
     deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-    deleteButton.addEventListener('click', function () {
+    deleteButton.addEventListener('click', function() {
       model.deleteTodo(todo.id);
     });
 
@@ -83,38 +113,41 @@ const view = {
 
     todoListElem.appendChild(listItem);
   },
-  renderTodos: function (todos) {
+
+  renderTodos: function(todos) {
     const todoListElem = document.getElementById("task-list");
     todoListElem.innerHTML = '';
-    todos.forEach((todo) => this.renderTodo(todo));
-  },
+    todos
+      .filter(todo => todo.title !== "test2")
+      .forEach(todo => this.renderTodo(todo));
+  }
 };
 
 const controller = {
-  init: function () {
+  init: function() {
     this.handleAddTodo();
   },
-  handleAddTodo: function () {
+
+  handleAddTodo: function() {
     const formElem = document.querySelector("form");
-    formElem.addEventListener("submit", function (e) {
+    formElem.addEventListener("submit", async function(e) {
       e.preventDefault();
       const inputElemVal = document.getElementById("new-task").value;
       if (inputElemVal.trim()) {
         const newTodo = {
-          id: model.nextId,
           title: inputElemVal,
           completed: false,
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         };
-        model.addTodo(newTodo);
+        await model.addTodo(newTodo);
         document.getElementById("new-task").value = '';
       }
     });
-  },
+  }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await model.init();
   controller.init();
-  view.init();
 });
