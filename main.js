@@ -223,6 +223,7 @@ const view = {
 
         const buttons = this.renderButtons(inputField,listElement,todo);
         
+        todo.completed ? buttons[1].click() : null;
 
         listElement.appendChild(inputField);
         buttons.forEach(button => listElement.appendChild(button));
