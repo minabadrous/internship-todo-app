@@ -1,31 +1,19 @@
 const model = {
-  todos: [
-    {
-      id: 1,
-      title: "task 1",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 2,
-      title: "task 2",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 39,
-      title: "task 3",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-  ],
-  addTodo: function (todo) {
-    this.todos.push(todo);
-    view.renderTodo(todo);
+  init: async function () {
+    const todos = await this.fetchTodos()
+    this.todos = todos
   },
+
+
+  todos: [],
+  addTodo: async function (todo) {
+    const val = await this.postTodos(todo);
+    console.log(val)
+    this.todos.push(val);
+    view.renderTodo(val);
+  },
+
+  
   getTodos: function () {
     return this.todos;
   },
@@ -39,13 +27,39 @@ const model = {
     todo.completed = !todo.completed;
     console.log(this.todos);
     view.updateTodo(uid);
-  }
+  },
+  fetchTodos: async function () {
+    return await fetch("http://127.0.0.1:8000/api/todos", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => data.todos)
+      .catch((error) => console.log(error));
+  },
+
+  postTodos: async function (todo) {
+    return await fetch("http://127.0.0.1:8000/api/todos", {
+      method: "POST",
+      headers: {
+        'Content-Type' : 'application/json',
+        
+      },
+      body: JSON.stringify(todo),
+    })
+      .then((res) => res.json())
+      .then(data => data.todo)
+      .catch((error) => console.log(error));
+  },
 };
 
+
+
+
+
+
 const view = {
-  init: function () {
-    const todos = model.getTodos();
-    todos.forEach((todo) => this.renderTodo(todo));
+  init: async function () {
+    model.todos.forEach((todo) => this.renderTodo(todo))
   },
   renderTodo: function (todo) {
     const todoElem = `<li data-uid="${todo.id}"><p>${todo.title}</p>
@@ -99,7 +113,8 @@ const controller = {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  controller.init();
+document.addEventListener("DOMContentLoaded", async () => {
+  await model.init()
   view.init();
+  controller.init();
 });
