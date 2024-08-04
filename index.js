@@ -94,6 +94,16 @@ const controller = {
   init: function () {
     this.handleAddTodo();
   },
+  disableEnableDelete: function (uid) {
+    const todo = document.querySelector(`[data-uid="${uid}"]`);
+    const deleteBtn = todo.querySelector(".trash-can");
+    deleteBtn.disabled = !deleteBtn.disabled;
+  },
+  disableEnableCheck: function (uid) {
+    const todo = document.querySelector(`[data-uid="${uid}"]`);
+    const checkMarkBtn = todo.querySelector(".check-mark");
+    checkMarkBtn.disabled = !checkMarkBtn.disabled;
+  },
   handleAddTodo: function () {
     const formElem = document.getElementById("myForm");
     formElem.addEventListener("submit", function (e) {
@@ -111,6 +121,7 @@ const controller = {
     });
   },
   handleDeleteTodo: async function (uid) {
+    this.disableEnableDelete(uid);
     fetch(`http://127.0.0.1:8000/api/todos/${uid}`, {
       method: "DELETE",
     })
@@ -123,9 +134,13 @@ const controller = {
       .then((data) => {
         console.log(data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        this.disableEnableDelete(uid);
+        console.log(error + "\n" + "No Internet Connection");
+      });
   },
   handleCheckTodo: async function (uid) {
+    this.disableEnableCheck(uid);
     return await fetch(`http://127.0.0.1:8000/api/todos/${uid}`, {
       method: "PATCH",
       body: JSON.stringify({
@@ -139,8 +154,12 @@ const controller = {
       .then((data) => {
         model.checkTodo(data.id);
         console.log(data);
+        this.disableEnableCheck(uid);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        this.disableEnableCheck(uid);
+        console.log(error + "\n" + "No Internet Connection");
+      });
   },
   handlePostTodo: async function (todo) {
     return await fetch("http://127.0.0.1:8000/api/todos", {
