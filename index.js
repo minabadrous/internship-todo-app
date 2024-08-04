@@ -1,21 +1,18 @@
 // Form submission event handler
-document.querySelector('form').addEventListener('submit', function(event) {
+document.querySelector('form').addEventListener('submit', function (event) {
   event.preventDefault();
-  
+
   const taskInput = document.getElementById('myTextBox');
   const taskText = taskInput.value.trim();
-  
-  if (taskText) {
-      const newTodo = {
-          id: model.getTodos().length ? model.getTodos()[model.getTodos().length - 1].id + 1 : 1,
-          title: taskText,
-          completed: false,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-      };
 
-      model.addTodoToServer(newTodo); // Call to server to add new todo
-      taskInput.value = '';
+  if (taskText) {
+    const newTodo = {
+      title: taskText,
+      completed: false,
+    };
+
+    controller.addTodoToServer(newTodo);
+    taskInput.value = '';
   }
 });
 
@@ -23,20 +20,16 @@ document.querySelector('form').addEventListener('submit', function(event) {
 const model = {
   todos: [],
 
-  init: async function() {
+  init: async function () {
     await this.fetchTodos(); // Fetch and initialize todos
   },
 
-
-  
   addTodo: function (todo) {
     todo.title = todo.title || 'New Task';
 
     this.todos.push(todo);
     view.renderTodo(todo);
   },
-
-
 
   getTodos: function () {
     return this.todos;
@@ -47,53 +40,11 @@ const model = {
   },
 
 
-  updateTodo: function (id) {
-    const todo = this.getTodos().find(todo => todo.id === id);
 
+  updateTodo: function (id, completed) {
+    this.todos.filter((todo) => todo.id === id).completed = completed
 
-    if (todo) {
-      console.log('Todo to update:', todo); // Debugging prnnnttt
-
-      fetch(`http://127.0.0.1:8000/api/todos/${id}/toggle`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-
-        body: JSON.stringify({ completed: !todo.completed }),
-        mode: 'cors',
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Updated todo:', data); // Debugging
-        if (data.todo) {
-          this.updateTodoInModel(data.todo); // Update model with the latest data
-        }
-      })
-      .catch(error => console.error('Error:', error));
-    }
   },
-
-
-
-
-
-
-
-
-
-
-
-  updateTodoInModel: function(updatedTodo) {
-    const index = this.todos.findIndex(todo => todo.id === updatedTodo.id);
-    if (index !== -1) {
-      this.todos[index] = updatedTodo;
-      view.handleselectors(updatedTodo.id); // Update view
-    }
-  },
-
-
 
 
 
@@ -101,64 +52,21 @@ const model = {
     return fetch("http://127.0.0.1:8000/api/todos", {
       method: "GET",
     })
-    .then(res => res.json())
-    .then(data => {
-      console.log('Fetched todos:', data); // Debugging
-      this.todos = data.todos.map(todo => {
-        todo.title = todo.title || 'New Task';
-        return todo;
-      });
-      view.renderTodos(); 
-    })
-    .catch(error => console.log('Error:', error));
+      .then(res => res.json())
+      .then(data => {
+        console.log('Fetched todos:', data); // Debugging
+        this.todos = data.todos
+        view.renderTodos();
+      })
+      .catch(error => console.log('Error:', error));
   },
-
-
-
-
-
-
-  addTodoToServer: function (todo) {
-    fetch("http://127.0.0.1:8000/api/todos", {
-      method: 'POST',
-
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-
-      body: JSON.stringify(todo),
-      mode: 'cors',
-    })
-    .then(response => {
-      if (!response.ok) {
-        return response.json().then(err => { throw new Error(err.message); });
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Created todo:', data); // Debugging prrrrnttt
-      this.addTodo(data.todo); 
-    })
-    .catch(error => console.log('Error:', error.message));
-  }
 };
-
-
-
-
-
-
-
-
-
 
 
 
 // View
 const view = {
   init: function () {
-    model.init(); // Initialize model
   },
 
   renderTodos: function () {
@@ -176,16 +84,20 @@ const view = {
     todoElem.dataset.id = todo.id;
     todoElem.innerHTML = `
       <p>${todo.title}</p>
-      <button class="mark-btn"><i class="fas fa-check"></i></button>
+      <button onclick="controller.updateTodoServer(${todo.id})" class="mark-btn"><i class="fas fa-check"></i></button>
       <button class="delete-btn"><i class="fas fa-trash"></i></button>
     `;
+
     todoElem.querySelector('.mark-btn').addEventListener('click', () => {
       controller.handleMarkTodoAsCompleted(todo.id);
     });
+
     todoElem.querySelector('.delete-btn').addEventListener('click', () => {
       controller.handleDeleteTodo(todo.id);
     });
     document.querySelector('#todosList').appendChild(todoElem);
+
+    console.log(todo)
   },
 
   handleselectors: function (id) {
@@ -195,7 +107,27 @@ const view = {
         taskElem.classList.toggle('completed', todo.completed);
       }
     });
+  },
+
+
+  removeTodoElem: function (id) {
+    const todoElem = document.querySelector(`[data-id="${id}"]`);
+    todoElem.remove()
+  },
+
+
+
+
+  UpdateTodoelem: function (id) {
+    const todoElem = document.querySelector(`[data-id="${id}"]`);
+    todoElem.classList.toggle('completed')
+
   }
+
+
+
+
+
 };
 
 // Controller
@@ -204,20 +136,137 @@ const controller = {
     view.init();
   },
 
+
   handleMarkTodoAsCompleted: function (id) {
     model.updateTodo(id);
   },
 
+  addTodoToServer: function (todo) {
+    fetch("http://127.0.0.1:8000/api/todos", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(todo),
+      mode: 'cors',
+    })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => { throw new Error(err.message); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Created todo:', data); // Debugging
+        model.addTodo(data.todo);
+      })
+      .catch(error => console.log('Error:', error.message));
+  },
+
+
+
+
+
+
+
   handleDeleteTodo: function (id) {
-    model.removeTodo(id);
-    document.querySelectorAll('#todosList .task').forEach((taskElem) => {
-      if (parseInt(taskElem.dataset.id) === id) {
-        taskElem.remove();
-      }
-    });
-  }
+    this.deleteTodoFromServer(id);
+  },
+
+
+
+
+
+  deleteTodoFromServer: function (id) {
+
+    const todo = model.getTodos().find(todo => todo.id === id);
+    const elem=document.querySelector(".delete-btn");
+    elem.disabled="true";
+
+
+
+
+    fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+      method: 'DELETE',
+    })
+      .then(response => {
+        elem.disabled = "";
+        if (response.ok) {
+          model.removeTodo(id);
+          view.removeTodoElem(id);
+        }
+      })
+      .catch(error => {
+        elem.disabled = "";
+        console.log('Error:', error.message)
+  })
+  },
+
+
+
+
+
+  handleDeleteTodo: function (id) {
+    this.deleteTodoFromServer(id);
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+  updateTodoServer: function (id) {
+    const todo = model.getTodos().find(todo => todo.id === id);
+    const elem=document.querySelector(".mark-btn");
+    elem.disabled="true";
+
+
+
+    fetch(`http://127.0.0.1:8000/api/todos/${id}/toggle`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+
+      },
+      body: JSON.stringify({ completed: !todo.completed }),
+
+    })
+      .then(response => {
+        elem.disabled="";
+        response.json()
+  })
+      .then(data => {
+        model.updateTodo(id)
+        view.UpdateTodoelem(id)
+        return data.todo
+      })
+      .catch(error => {
+        elem.disabled="";
+  });
+
+  // document.querySelector(`[data-id="${id}"]`).disabled = false
+
+
+
+  },
+
+
+
+
+
 };
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
+  model.init(); // Initialize model
+  view.init()
   controller.init();
 });
