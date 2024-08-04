@@ -39,8 +39,12 @@ const view = {
     todos.forEach((todo) => this.renderTodo(todo));
   },
   renderTodo: function (todo) {
-    const todoElem = `<li data-uid="${todo.id}"><p>${todo.title}</p>
-          <button class="check-mark" onclick = "controller.handleCheckTodo(${todo.id})">
+    const todoElem = `<li data-uid="${todo.id}" class = "${
+      todo.completed ? "done" : ""
+    }"><p>${todo.title}</p>
+          <button class="check-mark" onclick = "controller.handleCheckTodo(${
+            todo.id
+          })">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
@@ -55,7 +59,9 @@ const view = {
             </svg>
           </button>
 
-          <button class="trash-can" onclick="controller.handleDeleteTodo(${todo.id})">
+          <button class="trash-can" onclick="controller.handleDeleteTodo(${
+            todo.id
+          })">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
