@@ -1,35 +1,38 @@
 const model = {
+  init:async function(){
+    const todos=await this.fetchTodos();
+    this.todos=todos
+  },
     todos: [
-      {
-        id: 1,
-        title: "task 1",
-        completed: false,
-        created_at: "",
-        updated_at: "",
-      },
-      {
-        id: 2,
-        title: "task 2",
-        completed: false,
-        created_at: "",
-        updated_at: "",
-      },
-      {
-        id: 39,
-        title: "task 3",
-        completed: false,
-        created_at: "",
-        updated_at: "",
-      },
     ],
-    addTodo: function (todo) {
+
+    addTodo:async function (todo) {
+const response=await fetch ("http://127.0.0.1:8000/api/todos", {
+  method:"POST",
+  body:JSON.stringify({title:todo.title,completed:false}),
+  headers:{"Content-Type":"application/json"},
+
+})
+.then((response)=>response.json())
+.then((data)=>data.todo)
+.catch((error)=>console.log(error));
+
+
       this.todos.push(todo);
       view.renderTodo(todo);
     },
     getTodos: function () {
-      return this.todos;
+      return this.todos;git ra
     },
+
+
     deleteTodo: function (uid) {
+      fetch("http://127.0.0.1:8000/api/todos/" +uid,{
+        method:"DELETE",
+      })
+      .then((res)=>res.json())
+      .then((res)=>console.log(res));
+
       this.todos = this.todos.filter((todo) => todo.id !== parseInt(uid));
       view.removeTodo(uid);
     },
@@ -39,6 +42,15 @@ const model = {
       console.log(this.todos);
       view.updateTodo(uid);
     },
+    fetchTodos: async function () {
+      return await  fetch("http://127.0.0.1:8000/api/todos", {
+          method: "GET",
+        })
+          .then((res) => res.json())
+          .then((data) => data.todos)
+          .catch((error) => console.log(error));
+      },
+    
   };
   
   const view = {
@@ -100,7 +112,7 @@ const model = {
       const formElem = document.getElementById("myForm");
       formElem.addEventListener("submit", function (e) {
         e.preventDefault();
-        const inputElemVal = document.getElementById("todo-input").value;
+        const inputElemVal = document.getElementById("in").value;
         model.addTodo({
           id: model.getTodos()[model.getTodos().length - 1].id + 1,
           title: inputElemVal,
@@ -120,7 +132,8 @@ const model = {
     },
   };
   
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded",async () => {
+   await model.init()
+   view.init();
     controller.init();
-    view.init();
   });
