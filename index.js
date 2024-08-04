@@ -7,10 +7,10 @@ const model = {
     ],
 
     addTodo:async function (todo) {
-const response=await fetch ("http://127.0.0.1:8000/api/todos", {
-  method:"POST",
-  body:JSON.stringify({title:todo.title,completed:false}),
-  headers:{"Content-Type":"application/json"},
+    const response=await fetch ("http://127.0.0.1:8000/api/todos", {
+    method:"POST",
+     body:JSON.stringify({title:todo.title,completed:false}),
+     headers:{"Content-Type":"application/json"},
 
 })
 .then((response)=>response.json())
@@ -22,7 +22,7 @@ const response=await fetch ("http://127.0.0.1:8000/api/todos", {
       view.renderTodo(todo);
     },
     getTodos: function () {
-      return this.todos;git ra
+      return this.todos;
     },
 
 
