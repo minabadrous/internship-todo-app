@@ -4,30 +4,28 @@ const model = {
     this.todos = todos
   },
 
-
   todos: [],
-  addTodo: async function (todo) {
-    const val = await this.postTodos(todo);
-    console.log(val)
-    this.todos.push(val);
-    view.renderTodo(val);
-  },
 
+  addTodo: async function (todo) {
+    this.todos.push(todo);
+    view.renderTodo(todo);
+  },
   
   getTodos: function () {
     return this.todos;
   },
+
   deleteTodo: function (uid) {
     this.todos=this.todos.filter((todo) => todo.id !== parseInt(uid));
-    console.log(model.todos);
-    view.delteObject(uid);
+    view.deleteObject(uid);
   },
+
   checkTodo: function(uid) {
-    const todo =this.todos.find((todo) => todo.id === parseInt(uid));
+    const todo = this.todos.find((todo) => todo.id === parseInt(uid));
     todo.completed = !todo.completed;
-    console.log(this.todos);
     view.updateTodo(uid);
   },
+  
   fetchTodos: async function () {
     return await fetch("http://127.0.0.1:8000/api/todos", {
       method: "GET",
@@ -36,23 +34,7 @@ const model = {
       .then((data) => data.todos)
       .catch((error) => console.log(error));
   },
-
-  postTodos: async function (todo) {
-    return await fetch("http://127.0.0.1:8000/api/todos", {
-      method: "POST",
-      headers: {
-        'Content-Type' : 'application/json',
-        
-      },
-      body: JSON.stringify(todo),
-    })
-      .then((res) => res.json())
-      .then(data => data.todo)
-      .catch((error) => console.log(error));
-  },
 };
-
-
 
 
 
@@ -63,11 +45,11 @@ const view = {
   },
   renderTodo: function (todo) {
     const todoElem = `<li data-uid="${todo.id}"><p>${todo.title}</p>
-                           <button onclick="controller.handleCheck(this)" class="circle check">
+                           <button onclick="controller.updateTodos(${todo.id})" class="circle check">
                            <i class="fas fa-check-circle"></i>
                            </button>
 
-                           <button onclick="controller.handleDelete(this)" class="circle delete">
+                           <button onclick="controller.deleteTodos(${todo.id})" class="circle delete">
                            <i class="fas fa-trash"></i>
                            </button></li>`;
     const todoListElem = document.getElementById("todosList");
@@ -75,42 +57,103 @@ const view = {
     todoListElem.innerHTML += todoElem;
     return;
   },
-  delteObject: function(uid) {
+
+  deleteObject: function(uid) {
     const element = document.querySelector(`[data-uid="${uid}"]`);
     element.remove();
   },
+
   updateTodo: function(uid) {
     const element = document.querySelector(`[data-uid="${uid}"]`);
     element.classList.toggle("done");
   },
 };
 
+
 const controller = {
   init: function () {
     this.handleAddTodo();
   },
+
   handleAddTodo: function () {
     const formElem = document.getElementById("myForm");
     formElem.addEventListener("submit", function (e) {
       e.preventDefault();
       const inputElemVal = document.getElementById("in").value;
-      model.addTodo({
-        id: (model.getTodos()[model.getTodos().length - 1]?.id ?? 0) + 1,
+
+      const newTodo = {
         title: inputElemVal,
         completed: false,
-        created_at: "",
-        updated_at: "",
-      });
+      }
+
+      controller.postTodos(newTodo);
     });
   },
-  handleDelete: function(element) {
-    const uid = element.parentNode.getAttribute("data-uid");
-    model.deleteTodo(uid);
+
+
+
+  postTodos: async function (todo) {
+    
+    return await fetch("http://127.0.0.1:8000/api/todos", {
+      method: "POST",
+      headers: {
+        'Content-Type' : 'application/json',
+      },
+      body: JSON.stringify(todo),
+    })
+      .then((res) => {
+        if(res.ok) return res.json();
+      })
+      .then((data) => {
+        model.addTodo(data.todo);
+      })
+      .catch((error) => console.log(error));
   },
-  handleCheck: function(element) {
-    const uid = element.parentNode.getAttribute("data-uid");
-    model.checkTodo(uid);
-  }
+
+  deleteTodos: async function (id) {
+    
+    const elem = document.querySelector(".circle.delete");
+    elem.disabled = "true";
+
+    return await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type' : 'application/json',
+      },
+    })
+    .then((res) => {
+      elem.disabled = ''
+      if(res.ok) model.deleteTodo(id);
+    })
+    .catch((error) => {
+      console.log(error);
+      elem.disabled = "";
+  });
+  },
+
+  updateTodos: async function (id, completed) {
+
+    const todo = model.todos.find((todo) => todo.id === parseInt(id));
+    const elem = document.querySelector(".circle.check");
+
+    elem.disabled = "true";
+
+    return await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type' : 'application/json',
+      },
+      body: JSON.stringify({completed: !todo.completed}),
+    })
+    .then((res) => {
+      elem.disabled = ''
+      if(res.ok) model.checkTodo(id);
+    })
+    .catch((error) => {
+    console.log(error);
+    elem.disabled = "";
+  });
+  },
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
