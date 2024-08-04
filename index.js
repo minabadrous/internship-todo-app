@@ -1,30 +1,21 @@
 const model = {
-  todos: [
-    {
-      id: 1,
-      title: "task 1",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 2,
-      title: "task 2",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 39,
-      title: "task 3",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-  ],
-  addTodo: function (todo) {
-    this.todos.push(todo);
-    view.renderTodo(todo);
+  init: async function () {
+    const todos = await this.fetchTodos();
+    this.todos = todos;
+  },
+  todos: [],
+  addTodo: async function (todo) {
+    const response = await fetch("http://127.0.0.1:8000/api/todos", {
+      method: "POST",
+      body: JSON.stringify({ title: todo.title, completed: false }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => data.todo)
+      .catch((error) => console.log(error));
+ 
+    model.todos.push(response);
+    view.renderTodo(response);
   },
   getTodos: function () {
     return this.todos;
@@ -38,6 +29,14 @@ const model = {
     todo.completed = !todo.completed;
     console.log(this.todos);
     view.updateTodo(uid);
+  },
+  fetchTodos: async function () {
+    return await fetch("http://127.0.0.1:8000/api/todos", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => data.todos)
+      .catch((error) => console.log(error));
   },
 };
 
@@ -120,7 +119,8 @@ const controller = {
   },
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await model.init();
   controller.init();
   view.init();
 });
