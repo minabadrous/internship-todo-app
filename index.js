@@ -1,32 +1,11 @@
 const model = {
-  todos: [
-    {
-      id: 1,
-      title: "task 1",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 2,
-      title: "task 2",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 39,
-      title: "task 3",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-  ],
+  todos: [],
   addTodo: function (todo) {
     this.todos.push(todo);
     view.renderTodo(todo);
   },
   getTodos: function () {
+    this.todos = this.fetchTodos();
     return this.todos;
   },
   deleteTodo: function (id) {
@@ -37,12 +16,23 @@ const model = {
     if (completedTodo) {
       completedTodo.completed = !completedTodo.completed;
     }
-  }
+  },
+  fetchTodos: function () {
+    console.log("Fetching.....");
+    fetch("http://127.0.0.1:8000/api/todos", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.log(`Server Error:${error}`));
+  },
 };
 
+model.fetchTodos();
+
 const view = {
-  init: function () {
-    const todos = model.getTodos();
+  init: function async() {
+    const todos = model.fetchTodos();
     todos.forEach((todo) => this.renderTodo(todo));
   },
   renderTodo: function (todo) {
