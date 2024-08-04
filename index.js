@@ -119,8 +119,22 @@ const controller = {
       })
       .catch((error) => console.log(error));
   },
-  handleCheckTodo: function (uid) {
-    model.checkTodo(uid);
+  handleCheckTodo: async function (uid) {
+    return await fetch(`http://127.0.0.1:8000/api/todos/${uid}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        completed: !model.todos.filter((todo) => todo.id === uid)[0].completed,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .then((data) => {
+        model.checkTodo(data.id);
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
   },
   handlePostTodo: async function (todo) {
     return await fetch("http://127.0.0.1:8000/api/todos", {
