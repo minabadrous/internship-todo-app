@@ -93,16 +93,23 @@ const controller = {
     })
   },
   deleteTodo: async function (id) {
+    this.toggleBtnState("delete", id);
     const delRequest = await fetch(
       `http://127.0.0.1:8000/api/todos/${id}`, {
       method: "DELETE",
     })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.log(`Server Error:${error}`));
+      .then((res) => {
+        this.toggleBtnState("delete", id);
+        return res.json();
+      })
+      .catch((error) => {
+        this.toggleBtnState("delete", id);
+        return console.log(`Server Error:${error}`)
+      });
     return delRequest;
   },
   updateTodo: async function (id) {
+    this.toggleBtnState("check", id);
     const editRequest = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
       method: "PATCH",
       headers: {
@@ -114,11 +121,14 @@ const controller = {
     })
       .then((res) => {
         if (res.ok) {
+          this.toggleBtnState("check", id);
           return res.json()
         }
       })
-      .then((data) => console.log(data))
-      .catch((error) => console.log(`Server Error:${error}`));
+      .catch((error) => {
+        this.toggleBtnState("check", id);
+        return console.log(`Server Error:${error}`)
+      });
     return editRequest;
   },
   addTodo: async function (taskTitle) {
@@ -137,6 +147,18 @@ const controller = {
       .catch((error) => console.log(`Server Error:${error}`));
 
     return fetchedData;
+  },
+  toggleBtnState: function (btnType, id) {
+    const todo = document.querySelector(`[data-uid = "${id}"]`);
+    if (btnType == "check") {
+      const checkBtn = todo.querySelector(".checkBtn");
+      checkBtn.disabled = !checkBtn.disabled;
+    }
+    else if (btnType == "delete") {
+      const delBtn = todo.querySelector(".delBtn");
+      delBtn.disabled = !delBtn.disabled;
+    }
+
   }
 };
 
