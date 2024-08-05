@@ -17,14 +17,12 @@ const model = {
     checkTodo: function (uid) {
       const todo = this.todos.find((todo) => todo.id === parseInt(uid));
       todo.completed = !todo.completed;
-      console.log(this.todos);
       view.updateTodo(uid);
     },
 
   deleteTodo: function (uid) {
        this.todos = this.todos.filter((todo) => todo.id !== parseInt(uid));
        view.removeTodo(uid);
-       console.log(this.todos);
       },
 
     fetchTodos: async function () {
@@ -67,7 +65,6 @@ const model = {
                              <i class="fas fa-trash"></i>
                            </button>
                          </li>`;
-
 
       const todoListElem = document.getElementById("todosList");
       todoListElem.innerHTML += todoElem;
@@ -143,7 +140,6 @@ const model = {
         .then((data) => {
           model.checkTodo(data.id);
           this.enableDisableCheck(uid);
-          console.log(data);
         })
         .catch((error) => {
           this.enableDisableCheck(uid);
