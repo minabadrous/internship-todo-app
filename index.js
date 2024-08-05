@@ -1,63 +1,90 @@
 const model = {
-  todos: [
-    {
-      id: 1,
-      title: "task 1",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 2,
-      title: "task 2",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 39,
-      title: "task 3",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-  ],
-  addTodo: function (todo) {
-    this.todos.push(todo);
-    view.renderTodo(todo);
+  init: async function (){
+    await this.fetchTodos();
   },
-  removeTodo: function (id) {
+  todos: [],
+  addTodo: async function (todo) {
+    await controller.postTodo(todo); 
+  },
+  removeTodo: async function (id) {
     this.todos = this.todos.filter(todo => todo.id !== id);
     view.renderAllTodos();
+    
+    await this.deleteTodo(id); 
   },
   getTodos: function () {
     return this.todos;
   },
-  toggleTodo: function (id) {
+  toggleTodo: async function (id) {
     const todo = this.todos.find(todo => todo.id === id);
     if (todo) {
       todo.completed = !todo.completed;
       view.updateTodoStatus(id, todo.completed);
+      await controller.updateTodoOnServer(todo);
     }
   },
+  fetchTodos: async function () {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/todos", {
+        method: "GET",
+      });
+      const data = await response.json();
+      this.todos = data.todos;
+    } catch (error) {
+      
+    }
+  },
+  deleteTodo: async function (id) {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        view.removeTodo(id)
+      }
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
+  },
+ /* updateTodoOnServer: async function (todo) {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/todos/${todo.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(todo),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    }
+  },*/
 };
 
 const view = {
-  todoListElem: null, // Define the property
+  todoListElem: null,
 
   init: function () {
-    this.todoListElem = document.querySelector(".todo-list"); // Initialize the property
+    this.todoListElem = document.querySelector(".todo-list");
     const todos = model.getTodos();
     todos.forEach((todo) => this.renderTodo(todo));
   },
 
   renderTodo: function (todo) {
     const completedClass = todo.completed ? 'completed' : '';
-    const todoElem = `<li data-id="${todo.id}"><p>${todo.title}</p>
+    const todoElem = `<li data-id="${todo.id}" class="${completedClass}">
+                           <p>${todo.title}</p>
                            <button class="circle check">
                            <i class="fas fa-check-circle"></i>
                            </button>
-                           <button data-id="${todo.id}" class="circle delete">
+                           <button onclick="model.removeTodo(${todo.id})" class="circle delete">
                            <i class="fas fa-trash"></i>
                            </button></li>`;
     this.todoListElem.innerHTML += todoElem;
@@ -78,52 +105,108 @@ const view = {
       }
     }
   },
+
+  removeTodo: function (id) {
+    const todoElem = document.querySelector(`[data-id="${id}"]`);
+    if (todoElem) {
+      todoElem.remove();
+    }
+  }
 };
 
 const controller = {
   init: function () {
     this.handleAddTodo();
-    this.handleDelete();
     this.handleToggleComplete();
   },
 
   handleAddTodo: function () {
     const formElem = document.querySelector("form");
-    formElem.addEventListener("submit", function (e) {
+    formElem.addEventListener("submit", async function (e) {
       e.preventDefault();
       const inputElemVal = document.querySelector("input").value;
-      model.addTodo({
-        id: model.getTodos().length ? model.getTodos()[model.getTodos().length - 1].id + 1 : 1,
+      if (inputElemVal.trim() === "") return;
+
+      await model.addTodo({
         title: inputElemVal,
         completed: false,
-        created_at: "",
-        updated_at: "",
       });
+      formElem.reset();
     });
   },
-
-  handleDelete: function () {
-    document.querySelector(".todo-list").addEventListener("click", function (e) {
-      if (e.target.closest(".delete")) {
-        const todoId = parseInt(e.target.closest(".delete").getAttribute("data-id"));
-        model.removeTodo(todoId);
-      }
-    });
-  },
-
+// dina 
   handleToggleComplete: function () {
-    document.querySelector(".todo-list").addEventListener("click", function (e) {
+    document.querySelector(".todo-list").addEventListener("click", async function (e) {
       if (e.target.closest(".check")) {
+
+        e.target.closest(".check").disabled = true
+        
         const todoId = parseInt(e.target.closest("li").getAttribute("data-id"));
-        model.toggleTodo(todoId);
+        await model.toggleTodo(todoId);
+
+        e.target.closest(".check").disabled = false
+
       }
+    });
+  },
+
+  postTodo: async function (todo) {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/todos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(todo),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      model.todos.push(data.todo);
+      view.renderTodo(data.todo);
+      return data;
+    } catch (error) {
+      console.error("Error posting todo:", error);
+    }
+  },
+
+  updateTodoOnServer: async function (todo) {
+    
+    
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/todos/${todo.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(todo),
+        
+      });
+
+      if (!response.ok) {
+        
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      return await response.json();
+      
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    }
+
+    document.querySelector(".todo-list").addEventListener("click", function (e) {
+    
+      e.target.closest(".check").disabled= false;
     });
   }
-  
+
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  controller.init();
+document.addEventListener("DOMContentLoaded", async () => {
+  await model.init();
   view.init();
+  controller.init();
 });
-
