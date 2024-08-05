@@ -38,6 +38,8 @@ const view = {
         todos.forEach(todo => this.renderTodo(todo));
     },
 
+    // TODO : Refactor the render functions to be more modular with the use of text content and innerHTML later on
+
     renderListElement: function () {
         const li = document.createElement('li');
         li.className = 'taskElement';
