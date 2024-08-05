@@ -1,120 +1,191 @@
 const model = {
-  todos: [
-    {
-      id: 1,
-      title: "task 1",
-      completed: false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 2,
-      title: "task 2",
-      completed: false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 3,
-      title: "task 3",
-      completed: false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ],
-  nextId: 4, // Next ID to be used
+  todos: [],
 
-  addTodo: function (todo) {
-    this.todos.push(todo);
-    this.nextId++; // Increment the next ID
-    view.renderTodos(this.todos); // Render all todos to reflect new addition
+  init: async function() {
+    await this.fetchTodos();
+    view.renderTodos(this.todos);
   },
-  getTodos: function () {
+
+  getTodos: function() {
     return this.todos;
   },
-  updateTodo: function (id, updatedProperties) {
-    const todo = this.todos.find(todo => todo.id === id);
-    if (todo) {
-      Object.assign(todo, updatedProperties);
-      todo.updated_at = new Date().toISOString();
-      view.renderTodos(this.todos);
+
+  fetchTodos: async function() {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/todos");
+      const data = await res.json();
+      this.todos = data.todos || [];
+    } catch (error) {
+      console.log(error);
+      this.todos = [];
     }
   },
-  deleteTodo: function (id) {
-    this.todos = this.todos.filter(todo => todo.id !== id);
-    view.renderTodos(this.todos);
+
+  updateTodo: function(id, completed) {
+    const todo = this.todos.find(todo => todo.id === id);
+    if (todo) {
+      todo.completed = completed;
+      view.updateTodoView(id, completed);
+    }
   },
 };
 
 const view = {
-  init: function () {
-    const todos = model.getTodos();
-    todos.forEach((todo) => this.renderTodo(todo));
+  init: function() {
+    this.setupContextMenu();
+    this.setupNetworkStatus();
   },
-  renderTodo: function (todo) {
-    const todoListElem = document.getElementById("task-list");
-    const listItem = document.createElement('li');
-    listItem.className = 'task-item';
-    listItem.dataset.id = todo.id;
 
-    const taskText = document.createElement('span');
-    taskText.textContent = todo.title;
-    if (todo.completed) {
-      taskText.style.textDecoration = 'line-through';
-    }
+  renderTodo: function(todo) {
+    const todoElem = `
+      <li data-uid="${todo.id}" class="task-item ${todo.completed ? 'done' : ''}">
+        <p>${todo.title}</p>
+        <button onclick="controller.handleCheck(${todo.id})" class="circle complete-task">
+          <i class="fas fa-check-circle"></i>
+        </button>
+        <button onclick="controller.handleDeleteTodo(${todo.id})" class="circle delete-task">
+          <i class="fas fa-trash"></i>
+        </button>
+      </li>`;
+    const todoListElem = document.getElementById("todosList");
 
-    const completeButton = document.createElement('button');
-    completeButton.className = 'complete-task';
-    completeButton.innerHTML = '<i class="fas fa-check"></i>';
-    completeButton.addEventListener('click', function () {
-      model.updateTodo(todo.id, { completed: !todo.completed });
-    });
-
-    const deleteButton = document.createElement('button');
-    deleteButton.className = 'delete-task';
-    deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-    deleteButton.addEventListener('click', function () {
-      model.deleteTodo(todo.id);
-    });
-
-    listItem.appendChild(taskText);
-    listItem.appendChild(completeButton);
-    listItem.appendChild(deleteButton);
-
-    todoListElem.appendChild(listItem);
+    todoListElem.innerHTML += todoElem;
   },
-  renderTodos: function (todos) {
-    const todoListElem = document.getElementById("task-list");
+
+  renderTodos: function(todos) {
+    const todoListElem = document.getElementById("todosList");
     todoListElem.innerHTML = '';
-    todos.forEach((todo) => this.renderTodo(todo));
+    todos.forEach(todo => this.renderTodo(todo));
   },
-};
 
-const controller = {
-  init: function () {
-    this.handleAddTodo();
+  updateTodoView: function(id, completed) {
+    const todoElem = document.querySelector(`li[data-uid='${id}']`);
+    if (todoElem) {
+      todoElem.classList.toggle('done', completed);
+    }
   },
-  handleAddTodo: function () {
-    const formElem = document.querySelector("form");
-    formElem.addEventListener("submit", function (e) {
+
+  setupContextMenu: function() {
+    document.getElementById("todosList").addEventListener('contextmenu', function(e) {
       e.preventDefault();
-      const inputElemVal = document.getElementById("new-task").value;
-      if (inputElemVal.trim()) {
-        const newTodo = {
-          id: model.nextId,
-          title: inputElemVal,
-          completed: false,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        };
-        model.addTodo(newTodo);
-        document.getElementById("new-task").value = '';
+      const listItem = e.target.closest('li');
+      if (listItem) {
+        const id = parseInt(listItem.getAttribute('data-uid'), 10);
+        controller.handleCheck(id);
       }
     });
   },
+
+  setupNetworkStatus: function() {
+    const statusElem = document.getElementById("networkStatus");
+
+    const updateNetworkStatus = () => {
+      if (!navigator.onLine) {
+        statusElem.textContent = "You are offline. Some features may not be available.";
+        statusElem.style.display = "block";
+      } else {
+        statusElem.textContent = "";
+        statusElem.style.display = "none";
+      }
+    };
+
+    window.addEventListener("online", updateNetworkStatus);
+    window.addEventListener("offline", updateNetworkStatus);
+
+    updateNetworkStatus(); 
+  }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  controller.init();
+const controller = {
+  init: function() {
+    this.handleAddTodo();
+  },
+
+  handleAddTodo: function() {
+    const formElem = document.querySelector("form");
+    formElem.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const inputElemVal = document.getElementById("in").value;
+      if (inputElemVal.trim()) {
+        const newTodo = {
+          title: inputElemVal,
+          completed: false,
+        };
+        await controller.postMethod(newTodo);
+        document.getElementById("in").value = '';
+      }
+    });
+  },
+
+  handleCheck: async function(id) {
+    const todo = model.todos.find(todo => todo.id === id);
+    if (todo) {
+      const buttonElem = document.querySelector(`li[data-uid='${id}'] .complete-task`);
+      buttonElem.disabled = true;
+      await controller.handleUpdateTodo(id, { completed: !todo.completed });
+      buttonElem.disabled = false;
+    }
+  },
+
+  handleUpdateTodo: async function(id, updatedProperties) {
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedProperties)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        model.updateTodo(id, data.completed);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  handleDeleteTodo: async function(id) {
+    const isDeleted = await this.deleteMethod(id);
+    if (isDeleted) {
+      model.todos = model.todos.filter(todo => todo.id !== id);
+      view.renderTodos(model.todos);
+    }
+  },
+
+  postMethod: async function(todo) {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/todos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(todo)
+      });
+      const data = await res.json();
+
+      if (data.todo) {
+        model.todos.push(data.todo);
+        view.renderTodo(data.todo);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  deleteMethod: async function(id) {
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/todos/${id}`, {
+        method: "DELETE"
+      });
+      return res.ok;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await model.init();
   view.init();
+  controller.init();
 });
