@@ -5,7 +5,6 @@ const model = {
   },
   todos: [],
   addTodo: function (todo) {
-    console.log(todo);
     this.todos.push(todo);
     view.renderTodo(todo);
   },
@@ -15,12 +14,10 @@ const model = {
   deleteTodo: function (uid) {
     this.todos = this.todos.filter((todo) => todo.id !== parseInt(uid));
     view.removeTodo(uid);
-    console.log(this.todos);
   },
   checkTodo: function (uid) {
     const todo = this.todos.find((todo) => todo.id === parseInt(uid));
     todo.completed = !todo.completed;
-    console.log(this.todos);
     view.updateTodo(uid);
   },
   fetchTodos: async function () {
@@ -94,12 +91,12 @@ const controller = {
   init: function () {
     this.handleAddTodo();
   },
-  disableEnableDelete: function (uid) {
+  toggleDeleteBtn: function (uid) {
     const todo = document.querySelector(`[data-uid="${uid}"]`);
     const deleteBtn = todo.querySelector(".trash-can");
     deleteBtn.disabled = !deleteBtn.disabled;
   },
-  disableEnableCheck: function (uid) {
+  toggleCheckBtn: function (uid) {
     const todo = document.querySelector(`[data-uid="${uid}"]`);
     const checkMarkBtn = todo.querySelector(".check-mark");
     checkMarkBtn.disabled = !checkMarkBtn.disabled;
@@ -121,7 +118,7 @@ const controller = {
     });
   },
   handleDeleteTodo: async function (uid) {
-    this.disableEnableDelete(uid);
+    this.toggleDeleteBtn(uid);
     fetch(`http://127.0.0.1:8000/api/todos/${uid}`, {
       method: "DELETE",
     })
@@ -131,16 +128,14 @@ const controller = {
           return res.json();
         }
       })
-      .then((data) => {
-        console.log(data);
-      })
+      .then((data) => {})
       .catch((error) => {
-        this.disableEnableDelete(uid);
+        this.toggleDeleteBtn(uid);
         console.log(error + "\n" + "No Internet Connection");
       });
   },
   handleCheckTodo: async function (uid) {
-    this.disableEnableCheck(uid);
+    this.toggleCheckBtn(uid);
     return await fetch(`http://127.0.0.1:8000/api/todos/${uid}`, {
       method: "PATCH",
       body: JSON.stringify({
@@ -153,11 +148,10 @@ const controller = {
       })
       .then((data) => {
         model.checkTodo(data.id);
-        console.log(data);
-        this.disableEnableCheck(uid);
+        this.toggleCheckBtn(uid);
       })
       .catch((error) => {
-        this.disableEnableCheck(uid);
+        this.toggleCheckBtn(uid);
         console.log(error + "\n" + "No Internet Connection");
       });
   },
