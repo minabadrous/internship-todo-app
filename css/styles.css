@@ -19,7 +19,7 @@ header {
     align-items: center;
 }
 
-.App-title{
+.AppTitle{
     display: block;
 }
 
@@ -43,7 +43,7 @@ input:focus{
     outline: none;
 }
 
-.add-btn{
+.addBtn{
     width: 60px;
     height: 60px;
     border-radius: 100%;
@@ -56,7 +56,7 @@ input:focus{
     color: #FFC602;
 }
 
-.add-btn:hover{
+.addBtn:hover{
     background-color: #FFC602;
 
     #glyph{
@@ -99,13 +99,13 @@ input:focus{
     background-color: red;
 }
 
-.deleteBtn:hover .delete-icon{
-    animation-name: horizontal-shaking ;
+.deleteBtn:hover .deleteIcon{
+    animation-name: horizontalShaking ;
     animation-duration: .25s;
     animation-iteration-count: 2;
 }
 
-.delete-icon{
+.deleteIcon{
     font-size: 150%;
     color: #FFFFFF;
 }
@@ -120,19 +120,19 @@ input:focus{
 
 }
 
-.doneBtn:hover .done-icon{
+.doneBtn:hover .doneIcon{
     animation-name: bounce2;
     animation-iteration-count: infinite;
     animation-duration: 1s;
 
 }
 
-.done-icon{
+.doneIcon{
     font-size: 200%;
     color: #FFFFFF;
 }
 
-@keyframes horizontal-shaking {
+@keyframes horizontalShaking {
     0% { transform: translateX(0) }
     25% { transform: translateX(2px) }
     50% { transform: translateX(-2px) }
