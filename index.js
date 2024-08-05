@@ -9,7 +9,7 @@ const model = {
   removeTodo: async function (id) {
     this.todos = this.todos.filter(todo => todo.id !== id);
     view.renderAllTodos();
-    console.log(id)
+    
     await this.deleteTodo(id); 
   },
   getTodos: function () {
@@ -31,7 +31,7 @@ const model = {
       const data = await response.json();
       this.todos = data.todos;
     } catch (error) {
-      console.log(error);
+      
     }
   },
   deleteTodo: async function (id) {
