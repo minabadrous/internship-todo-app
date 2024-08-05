@@ -5,8 +5,8 @@
 }
 
 body {
-  background-color: blue;
-  color: rgb(116, 192, 252);
+  background-color: #00203fff;
+  color: #adefd1ff;
   font-family: "Poppins", sans-serif;
   min-height: 100vh;
 }
@@ -40,9 +40,9 @@ header {
 }
 
 #todo-button {
-  background-color: lightyellow;
+  background-color: white;
   border: solid;
-  border-color: rgb(116, 192, 252);
+  border-color: #adefd1ff;
   border-width: 6px;
   border-radius: 100%;
   padding: 3px;
@@ -51,9 +51,9 @@ header {
 }
 
 #todo-button:hover {
-  background-color: rgb(116, 192, 252);
+  background-color: #00203fff;
   border: solid;
-  border-color: lightyellow;
+  border-color: white;
   border-width: 6px;
   border-radius: 100%;
   padding: 3px;

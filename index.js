@@ -1,27 +1,9 @@
 const model = {
-  todos: [
-    {
-      id: 1,
-      title: "task 1",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 2,
-      title: "task 2",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-    {
-      id: 39,
-      title: "task 3",
-      completed: false,
-      created_at: "",
-      updated_at: "",
-    },
-  ],
+  init: async function () {
+    const todos = await this.fetchTodos();
+    this.todos = todos;
+  },
+  todos: [],
   addTodo: function (todo) {
     this.todos.push(todo);
     view.renderTodo(todo);
@@ -36,8 +18,15 @@ const model = {
   checkTodo: function (uid) {
     const todo = this.todos.find((todo) => todo.id === parseInt(uid));
     todo.completed = !todo.completed;
-    console.log(this.todos);
     view.updateTodo(uid);
+  },
+  fetchTodos: async function () {
+    return await fetch("http://127.0.0.1:8000/api/todos", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => data.todos)
+      .catch((error) => console.log(error));
   },
 };
 
@@ -47,8 +36,12 @@ const view = {
     todos.forEach((todo) => this.renderTodo(todo));
   },
   renderTodo: function (todo) {
-    const todoElem = `<li data-uid="${todo.id}"><p>${todo.title}</p>
-          <button class="check-mark" onclick = "controller.handleCheckTodo(this)">
+    const todoElem = `<li data-uid="${todo.id}" class = "${
+      todo.completed ? "done" : ""
+    }"><p>${todo.title}</p>
+          <button class="check-mark" onclick = "controller.handleCheckTodo(${
+            todo.id
+          })">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
@@ -63,7 +56,9 @@ const view = {
             </svg>
           </button>
 
-          <button class="trash-can" onclick="controller.handleDeleteTodo(this)">
+          <button class="trash-can" onclick="controller.handleDeleteTodo(${
+            todo.id
+          })">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="32"
@@ -96,31 +91,88 @@ const controller = {
   init: function () {
     this.handleAddTodo();
   },
+  toggleDeleteBtn: function (uid) {
+    const todo = document.querySelector(`[data-uid="${uid}"]`);
+    const deleteBtn = todo.querySelector(".trash-can");
+    deleteBtn.disabled = !deleteBtn.disabled;
+  },
+  toggleCheckBtn: function (uid) {
+    const todo = document.querySelector(`[data-uid="${uid}"]`);
+    const checkMarkBtn = todo.querySelector(".check-mark");
+    checkMarkBtn.disabled = !checkMarkBtn.disabled;
+  },
   handleAddTodo: function () {
     const formElem = document.getElementById("myForm");
     formElem.addEventListener("submit", function (e) {
       e.preventDefault();
-      const inputElemVal = document.getElementById("todo-input").value;
-      model.addTodo({
-        id: model.getTodos()[model.getTodos().length - 1].id + 1,
-        title: inputElemVal,
+      const inputElem = document.getElementById("todo-input");
+
+      const newTodo = {
+        title: inputElem.value,
         completed: false,
-        created_at: "",
-        updated_at: "",
-      });
+      };
+
+      inputElem.value = "";
+
+      controller.handlePostTodo(newTodo);
     });
   },
-  handleDeleteTodo: function (elem) {
-    const uid = elem.parentNode.getAttribute("data-uid");
-    model.deleteTodo(uid);
+  handleDeleteTodo: async function (uid) {
+    this.toggleDeleteBtn(uid);
+    fetch(`http://127.0.0.1:8000/api/todos/${uid}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (res.ok) {
+          model.deleteTodo(uid);
+          return res.json();
+        }
+      })
+      .then((data) => {})
+      .catch((error) => {
+        this.toggleDeleteBtn(uid);
+        console.log(error + "\n" + "No Internet Connection");
+      });
   },
-  handleCheckTodo: function (elem) {
-    const uid = elem.parentNode.getAttribute("data-uid");
-    model.checkTodo(uid);
+  handleCheckTodo: async function (uid) {
+    this.toggleCheckBtn(uid);
+    return await fetch(`http://127.0.0.1:8000/api/todos/${uid}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        completed: !model.todos.filter((todo) => todo.id === uid)[0].completed,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .then((data) => {
+        model.checkTodo(data.id);
+        this.toggleCheckBtn(uid);
+      })
+      .catch((error) => {
+        this.toggleCheckBtn(uid);
+        console.log(error + "\n" + "No Internet Connection");
+      });
+  },
+  handlePostTodo: async function (todo) {
+    return await fetch("http://127.0.0.1:8000/api/todos", {
+      method: "POST",
+      body: JSON.stringify(todo),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .then((data) => {
+        model.addTodo(data.todo);
+      })
+      .catch((error) => console.log(error));
   },
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await model.init();
   controller.init();
   view.init();
 });
