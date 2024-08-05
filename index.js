@@ -1,15 +1,19 @@
 const model = {
   todos: [],
+  init: async function () {
+    const fetchedTodos = await this.fetchTodos();
+    this.todos = fetchedTodos;
+  },
   addTodo: function (todo) {
     this.todos.push(todo);
     view.renderTodo(todo);
   },
   getTodos: function () {
-    this.todos = this.fetchTodos();
     return this.todos;
   },
   deleteTodo: function (id) {
     this.todos = this.todos.filter((todo) => todo.id !== parseInt(id));
+    removeTodo(id);
   },
   updateTodo: function (id) {
     let completedTodo = this.todos.filter((todo) => todo.id === parseInt(id))[0];
@@ -17,22 +21,40 @@ const model = {
       completedTodo.completed = !completedTodo.completed;
     }
   },
-  fetchTodos: function () {
-    console.log("Fetching.....");
-    fetch("http://127.0.0.1:8000/api/todos", {
+  fetchTodos: async function () {
+    const fetchedData = await fetch("http://127.0.0.1:8000/api/todos", {
       method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => data.todos)
+      .catch((error) => console.log(`Server Error:${error}`));
+
+    return fetchedData;
+  },
+  removeTodo: async function (id) {
+    const delRequest = await fetch(
+      "http://127.0.0.1:8000/api/todos", {
+      method: "DELETE",
     })
       .then((res) => res.json())
       .then((data) => console.log(data))
       .catch((error) => console.log(`Server Error:${error}`));
+    return delRequest;
   },
+  editTodo: async function (id) {
+    const editRequest = await fetch("http://127.0.0.1:8000/api/todos", {
+      method: "PATCH",
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.log(`Server Error:${error}`));
+    return editRequest;
+  }
 };
 
-model.fetchTodos();
-
 const view = {
-  init: function async() {
-    const todos = model.fetchTodos();
+  init: function () {
+    const todos = model.getTodos();
     todos.forEach((todo) => this.renderTodo(todo));
   },
   renderTodo: function (todo) {
@@ -98,7 +120,8 @@ const controller = {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await model.init();
   controller.init();
   view.init();
 });
