@@ -17,7 +17,7 @@ const model = {
     })
       .then((res) => res.json())
       .then((data) => data.todos)
-      .catch((error) => console.log(`Server Error:${error}`));
+      .catch((error) => error);
 
     return fetchedData;
   }
@@ -32,7 +32,7 @@ const view = {
     let todoElem = `
     <li data-uid="${todo.id}" class="taskItem">
     <p class="taskTitle">${todo.title}</p>
-    <button class="checkBtn actionBtn" type="button"><i class="fas fa-check-circle" style="color: #ffffff;"></i></i></button>
+    <button class="checkBtn actionBtn" type="button"><i class="fas fa-check-circle" style="color: #ffffff;"></i></button>
     <button class="delBtn actionBtn" type="button"><i class="fas fa-trash" style="color: #ffffff;"></i></button>
     </li>`;
     if (todo.completed) {
@@ -61,7 +61,6 @@ const controller = {
         title: taskTitle,
         completed: false,
       });
-
       todoInput.value = null;
       controller.addTodo(taskTitle);
     });
@@ -93,18 +92,15 @@ const controller = {
     })
   },
   deleteTodo: async function (id) {
-    this.toggleBtnState("delete", id);
     const delRequest = await fetch(
       `http://127.0.0.1:8000/api/todos/${id}`, {
       method: "DELETE",
     })
       .then((res) => {
-        this.toggleBtnState("delete", id);
         return res.json();
       })
       .catch((error) => {
-        this.toggleBtnState("delete", id);
-        return console.log(`Server Error:${error}`)
+        return error;
       });
     return delRequest;
   },
@@ -127,7 +123,7 @@ const controller = {
       })
       .catch((error) => {
         this.toggleBtnState("check", id);
-        return console.log(`Server Error:${error}`)
+        return error;
       });
     return editRequest;
   },
@@ -144,7 +140,7 @@ const controller = {
     })
       .then((res) => res.json())
       .then((data) => data.todos)
-      .catch((error) => console.log(`Server Error:${error}`));
+      .catch((error) => error);
 
     return fetchedData;
   },
