@@ -1,14 +1,10 @@
 function toggleCheckBtnState(id) {
     const todo = document.querySelector(`[data-uid = "${id}"]`);
     const checkBtn = todo.querySelector(".checkBtn");
-    console.log(checkBtn.disabled);
     checkBtn.disabled = !checkBtn.disabled;
-    console.log(checkBtn.disabled);
 }
-async function patchTodo({ todo }) {
-    console.log(`IN PATCH ${todo}`);
-
-    //toggleCheckBtnState(id);
+async function patchTodo(todo) {
+    toggleCheckBtnState(todo.id);
     const editRequest = await fetch(`http://127.0.0.1:8000/api/todos/${todo.id}`, {
         method: "PATCH",
         headers: {
@@ -18,12 +14,12 @@ async function patchTodo({ todo }) {
     })
         .then((res) => {
             if (res.ok) {
-                //toggleCheckBtnState(id);
-                return res.json()
+                toggleCheckBtnState(todo.id);
+                return res.json();
             }
         })
         .catch((error) => {
-            //toggleCheckBtnState(id);
+            toggleCheckBtnState(todo.id);
             return error;
         });
     return editRequest;

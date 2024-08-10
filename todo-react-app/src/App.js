@@ -7,15 +7,12 @@ import fetchTodos from './API/Fetch';
 import deleteTodo from './API/Delete';
 import postTodo from './API/Post';
 import patchTodo from './API/Patch';
-// import patchTodo from './API/Patch';
 
-
-const initTodos = [];
 
 
 function App() {
 
-  const [todos, setTodos] = useState(initTodos);
+  const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
 
   useEffect(() => {
@@ -46,22 +43,38 @@ function App() {
     }
   }
 
+  const completionUIupdate = (todoo) => {
+    // Toggle the completed status locally for immediate UI feedback
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === todoo.id) {
+        return { ...todo, completed: !todo.completed };
+      }
+      return todo;
+    });
 
-  const completeTodo = async (todo) => {
-    // const updatedTodo = todos.map((todo) => {
-    //   if (todo.id === id) {
-    //     todo.completed = !todo.completed;
-    //   }
-    //   return todo;
-    // });
-    const print = await patchTodo(todo);
-    console.log(print);
-
-
-
-    //setTodos(updatedTodo);
-
+    setTodos(updatedTodos);// Update the state immediately
   }
+
+  const patchRequest = async (todoo) => {
+    try {
+      const updatedTodo = await patchTodo(todoo);
+      setTodos((oldTodos) =>
+        oldTodos.map((todo) =>
+          todo.id === updatedTodo.id ? updatedTodo : todo
+        )
+      );
+    } catch (error) {
+      // Revert the state if the patch fails
+      setTodos(todos);
+    }
+  }
+
+
+  const completeTodo = async (todoo) => {
+    if (patchRequest(todoo)) {
+      completionUIupdate(todoo);
+    }
+  };
 
   return (
 

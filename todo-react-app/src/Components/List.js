@@ -1,5 +1,5 @@
 import '../styles.css';
-import React, { useState } from "react";
+import React from "react";
 import ListItem from './ListItem';
 
 function List({ todos, completeTodo, deleteTodo }) {
