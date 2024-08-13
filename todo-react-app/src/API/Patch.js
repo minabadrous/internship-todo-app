@@ -3,14 +3,14 @@ function toggleCheckBtnState(id) {
     const checkBtn = todo.querySelector(".checkBtn");
     checkBtn.disabled = !checkBtn.disabled;
 }
-async function patchTodo(todo) {
+export async function patchTodo(todo) {
     toggleCheckBtnState(todo.id);
     const editRequest = await fetch(`http://127.0.0.1:8000/api/todos/${todo.id}`, {
         method: "PATCH",
         headers: {
             "content-type": "application/json",//to know that the data is of type json
         },
-        body: JSON.stringify({ completed: !todo.completed }),//turning json to string 
+        body: JSON.stringify(todo),
     })
         .then((res) => {
             if (res.ok) {

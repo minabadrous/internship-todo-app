@@ -2,7 +2,7 @@ import '../styles.css';
 import React from "react";
 import ListItem from './ListItem';
 
-function List({ todos, completeTodo, deleteTodo }) {
+function List({ todos, completeTodo, deleteTodo, editTodo }) {
     return (
         <section id="todoTaskWrapper">
             <ul id="todoList">
@@ -14,6 +14,7 @@ function List({ todos, completeTodo, deleteTodo }) {
                                 todo={TodoData}
                                 onComplete={completeTodo}
                                 onDelete={deleteTodo}
+                                onEdit={editTodo}
                             />
                         )
                     })}

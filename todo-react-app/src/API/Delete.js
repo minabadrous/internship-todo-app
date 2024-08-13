@@ -1,4 +1,5 @@
-async function deleteTodo(id) {
+async function deleteTodoRequest(id) {
+
     const delRequest = await fetch(
         `http://127.0.0.1:8000/api/todos/${id}`, {
         method: "DELETE",
@@ -14,4 +15,4 @@ async function deleteTodo(id) {
 }
 
 
-export default deleteTodo;
+export default deleteTodoRequest;

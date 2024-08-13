@@ -19,31 +19,32 @@ header {
     align-items: center;
 }
 
-#title{
+#title {
     margin: 2rem;
 }
 
-#taskAdder{
+#taskAdder {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap:2rem
+    gap: 2rem
 }
 
 #taskInput:focus {
     background-color: lightyellow;
-    outline: none; /* Optional: to remove the default outline */
+    outline: none;
+    /* Optional: to remove the default outline */
 }
 
-#taskInput{
+#taskInput {
     border-radius: 2rem;
-    padding: 1rem; 
+    padding: 1rem;
     border: none;
     width: 20rem;
 
 }
 
-#addBtn{
+#addBtn {
     border-radius: 50%;
     border: none;
     padding: 0.35rem;
@@ -55,7 +56,8 @@ header {
 
 
 #btnWrapper:hover {
-    background-color: rgb(33, 15, 70);;
+    background-color: rgb(33, 15, 70);
+    ;
 }
 
 #btnWrapper:hover #addBtn {
@@ -64,15 +66,16 @@ header {
 }
 
 #btnWrapper:hover .addBtnIcon {
-    color: rgb(33, 15, 70);;
+    color: rgb(33, 15, 70);
+    ;
 }
 
-.addBtnIcon{
+.addBtnIcon {
     font-size: 20px;
     color: whitesmoke;
 }
 
-#btnWrapper{
+#btnWrapper {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,19 +88,19 @@ header {
 
 
 
-#todoTaskWrapper{
+#todoTaskWrapper {
     display: flex;
     justify-content: center;
     gap: 1rem;
 }
 
-#todoList{
+#todoList {
     margin: 2rem;
     width: 20rem;
 }
 
-.taskItem{
-    margin:1rem;
+.taskItem {
+    margin: 1rem;
     display: grid;
     grid-template-columns: 4fr 1fr 1fr;
     gap: 0.5rem;
@@ -108,41 +111,74 @@ header {
     align-items: center;
 }
 
-.taskTitle{
+.taskTitle {
     font-size: 18px;
     color: rgb(33, 15, 70);
 }
 
-.actionBtn{
+.actionBtn {
     border-radius: 2rem;
     border: none;
     padding: 0.5rem;
 }
 
-.checkBtn{
+.checkBtn {
     background-color: rgb(33, 15, 70);
-    &:hover{
+
+    &:hover {
         background-color: #6410EC;
     }
-    
+
 }
 
 
-.delBtn{
-    background-color: rgb(33, 15, 70,0.5);
-    &:hover{
+.delBtn {
+    background-color: rgb(33, 15, 70, 0.5);
+
+    &:hover {
         background-color: #6410EC;
     }
 }
 
 
-.done{
+.done {
     text-decoration: line-through;
-    color: rgb(33, 15, 70,0.5);
+    color: rgb(33, 15, 70, 0.5);
     background-color: rgba(250, 250, 210, 0.5);
-    
+
 }
 
-.icons{
+.icons {
     color: #ffffff;
 }
+#statusWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#todoStatus{
+    position: relative;
+    margin-top: 2rem;
+    left: 10rem;
+    border-radius: 2rem;
+    padding: 0.5rem;
+}
+
+#tabs{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.tabButton{
+    border-radius: 0.5rem;
+    border: none;
+    padding: 10px;
+}
+
+.tabButton:hover{
+    cursor: pointer;
+}
+.tabButton button.active {
+    background-color: #5d0303;
+  }
+  

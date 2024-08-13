@@ -11,9 +11,8 @@ async function postTodo(taskTitle) {
         }),
     })
         .then((res) => res.json())
-        .then((data) => data.todo)
+        .then((data) => data.data)
         .catch((error) => error);
-
     return fetchedData;
 }
 
