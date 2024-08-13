@@ -43,8 +43,7 @@ function App() {
     async function fetchTodosRequest() {
       const fetchedTodos = await fetchTodos();
       setTodos(fetchedTodos);
-      setFilteredTodos(fetchedTodos)
-
+      setFilteredTodos(fetchedTodos);
     }
     fetchTodosRequest();
   }, []);
@@ -55,7 +54,7 @@ function App() {
       setHistory(fetchedTodos);
     }
     fetchHistory();
-  }, [history]);
+  }, []);
 
   useEffect(() => {
     handleOptionChange()
@@ -82,6 +81,32 @@ function App() {
     }
   }
 
+
+
+  const patchRequest = async (todo) => {
+    console.log(todo)
+    try {
+      const updatedTodo = await patchTodo({ ...todo, completed: !todo.completed });
+
+      setTodos((oldTodos) =>
+        oldTodos.map((todo) =>
+          todo.id === updatedTodo.id ? updatedTodo : todo
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const editTitle = async (id, newTitle) => {
+    const editedTodo = await patchTodo({ id, title: newTitle });
+    console.log(editedTodo)
+
+    setTodos((oldTodos) =>
+      oldTodos.map((todo) =>
+        todo.id === editedTodo.id ? editedTodo : todo
+      )
+    );
+  }
   const completionUIupdate = (todoo) => {
     // Toggle the completed status locally for immediate UI feedback
     const updatedTodos = todos.map((todo) => {
@@ -93,26 +118,6 @@ function App() {
 
     setTodos(updatedTodos);// Update the state immediately
   }
-  const editTitle = async (todo) => {
-    const editedTodo = await patchTodo(todo);
-    setTitle(editedTodo.title);
-  }
-
-  const patchRequest = async (todo) => {
-    try {
-      const updatedTodo = await patchTodo(todo);
-      console.log("Updated todo", updatedTodo);
-
-      setTodos((oldTodos) =>
-        oldTodos.map((todo) =>
-          todo.id === updatedTodo.id ? updatedTodo : todo
-        )
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   // must edit so it doesnt just call patch request in general
   const completeTodo = async (todo) => {
     if (patchRequest(todo)) {
@@ -146,7 +151,7 @@ function App() {
               todos={filteredTodos}
               completeTodo={completeTodo}
               deleteTodo={deleteTodo}
-              editTitle={editTitle}
+              editTodo={editTitle}
             />
           </>
         ) : (

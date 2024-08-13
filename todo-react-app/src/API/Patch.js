@@ -18,6 +18,7 @@ export async function patchTodo(todo) {
                 return res.json();
             }
         })
+        .then((res) => res.data)
         .catch((error) => {
             toggleCheckBtnState(todo.id);
             return error;

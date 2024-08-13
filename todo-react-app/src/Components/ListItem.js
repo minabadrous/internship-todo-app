@@ -5,10 +5,12 @@ function ListItem({ todo, onComplete, onDelete, onEdit }) {
 
     const [isEditing, setIsEditing] = useState(false);
     const [newTitle, setNewTitle] = useState(todo.title);
+
+
     return (
         <li data-uid={todo.id} className={`taskItem ${todo.completed ? "done" : ""}`}>
             {isEditing ?
-                (<input type="text" name="task" onBlur={() => { setIsEditing(false); setNewTitle(newTitle); }} onChange={(e) => setNewTitle(e.target.value)} value={newTitle} />)
+                (<input type="text" name="task" onBlur={() => { setIsEditing(false); onEdit(todo.id, newTitle); }} onChange={(e) => setNewTitle(e.target.value)} value={newTitle} />)
                 : (
 
                     <p className="taskTitle" onClick={() => setIsEditing(true)}>{todo.title}</p>
