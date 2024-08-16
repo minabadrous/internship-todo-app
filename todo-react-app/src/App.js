@@ -8,6 +8,7 @@ import fetchTodos from './API/Fetch';
 import deleteTodoRequest from './API/Delete';
 import postTodo from './API/Post';
 import patchTodo from './API/Patch';
+import Chart from './Components/Chart';
 
 
 
@@ -18,7 +19,6 @@ function App() {
   const [history, setHistory] = useState([]);
   const [filteredTodos, setFilteredTodos] = useState(todos);
   const [title, setTitle] = useState("");
-
   const [isCurrentTab, setIsCurrentTab] = useState(true);
 
   const handleOptionChange = useCallback(() => {
@@ -39,27 +39,6 @@ function App() {
     return selected;
   }, [todos]);
 
-  useEffect(() => {
-    async function fetchTodosRequest() {
-      const fetchedTodos = await fetchTodos();
-      setTodos(fetchedTodos);
-      setFilteredTodos(fetchedTodos);
-    }
-    fetchTodosRequest();
-  }, []);
-
-  useEffect(() => {
-    async function fetchHistory() {
-      const fetchedTodos = await fetchTodos({ filter: history });
-      setHistory(fetchedTodos);
-    }
-    fetchHistory();
-  }, []);
-
-  useEffect(() => {
-    handleOptionChange()
-  }, [todos, handleOptionChange])
-
   const update = async (e) => {
     e.preventDefault();
 
@@ -69,7 +48,6 @@ function App() {
     }
     setTitle("");
   }
-
 
   const deleteTodo = async (id) => {
 
@@ -81,10 +59,7 @@ function App() {
     }
   }
 
-
-
   const patchRequest = async (todo) => {
-    console.log(todo)
     try {
       const updatedTodo = await patchTodo({ ...todo, completed: !todo.completed });
 
@@ -99,8 +74,6 @@ function App() {
   }
   const editTitle = async (id, newTitle) => {
     const editedTodo = await patchTodo({ id, title: newTitle });
-    console.log(editedTodo)
-
     setTodos((oldTodos) =>
       oldTodos.map((todo) =>
         todo.id === editedTodo.id ? editedTodo : todo
@@ -125,46 +98,104 @@ function App() {
     }
   };
 
-  return (
+  useEffect(() => {
+    async function fetchTodosRequest() {
+      const fetchedTodos = await fetchTodos();
+      setTodos(fetchedTodos);
+      setFilteredTodos(fetchedTodos);
+    }
+    fetchTodosRequest();
+  }, []);
 
-    <>
+  useEffect(() => {
+    async function fetchHistory() {
+      const fetchedTodos = await fetchTodos({ filter: history });
+      setHistory(fetchedTodos);
+    }
+    fetchHistory();
+  }, []);
+
+  useEffect(() => {
+    handleOptionChange()
+  }, [todos, handleOptionChange])
+
+
+
+  const getCompletedCount = (todos) => {
+    //loop over todos and get count
+    let count = 0;
+    todos.forEach((todo) => todo.completed ? count++ : "")
+    return count;
+  }
+
+
+  const getCompletedPercentage = (todos) => {
+    const totalCount = todos.length;
+    const completedCount = getCompletedCount(todos);
+    const completePercentage = (completedCount / totalCount) * 800;
+    return completePercentage;
+  }
+
+  const setData = (todos) => {
+    let data = [
+      { name: "completed", value: getCompletedPercentage(todos) },
+      { name: "incomplete", value: 800 - getCompletedPercentage(todos) }
+    ]
+
+    return data;
+  }
+  return (
+    //CHANGE DATAT BEING PASSED INTO THE CHART TO ITS RESPECTIVE VALUE
+    <div id='content'>
       <header>
         <h1 id="title">My To-Do List</h1>
       </header>
-
       <div id="tabs">
         <button className={isCurrentTab ? "tabButton active" : "tabButton"} onClick={() => setIsCurrentTab(true)}>Current</button>
         <button className={!isCurrentTab ? "tabButton active" : "tabButton"} onClick={() => setIsCurrentTab(false)}>History</button>
       </div>
 
-      <main>
+
+      <main id='mainSection'>
         {isCurrentTab ? (
           <>
-            <Form
-              title={title}
-              update={update}
-              setTitle={setTitle} />
-            <ActivityStatus
-              getOption={handleOptionChange} />
 
-            <List
-              todos={filteredTodos}
-              completeTodo={completeTodo}
-              deleteTodo={deleteTodo}
-              editTodo={editTitle}
-            />
+            <div>
+              <Chart
+                data={setData(filteredTodos)}></Chart>
+            </div>
+            <div>
+              <Form
+                title={title}
+                update={update}
+                setTitle={setTitle} />
+              <ActivityStatus
+                getOption={handleOptionChange} />
+
+              <List
+                todos={filteredTodos}
+                completeTodo={completeTodo}
+                deleteTodo={deleteTodo}
+                editTodo={editTitle}
+              />
+            </div>
           </>
         ) : (
-          <div>
-            History
-
-            <List
-              todos={history}
-            />
-          </div>
+          <>
+            <div>
+              <Chart
+                data={setData(history)}></Chart>
+            </div>
+            <div id='historySection'>
+              <h1>History</h1>
+              <List
+                todos={history}
+              />
+            </div>
+          </>
         )}
       </main>
-    </>
+    </div>
   );
 }
 

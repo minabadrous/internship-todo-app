@@ -168,6 +168,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 2rem;
 }
 .tabButton{
     border-radius: 0.5rem;
@@ -182,3 +183,22 @@ header {
     background-color: #5d0303;
   }
   
+#mainSection{
+    display: flex;
+    justify-content: flex-start; /* Distributes space between items */
+    align-items:flex-start /* Centers items vertically (if needed) */
+
+}
+
+#content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+}
+
+#historySection{
+    display: flex;
+    flex-direction: column;
+
+}
