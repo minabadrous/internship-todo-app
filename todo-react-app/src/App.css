@@ -1,0 +1,162 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #00203fff;
+  color: #adefd1ff;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+}
+
+header {
+  font-size: 1.5rem;
+  min-height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#form-header {
+  display: flex;
+  justify-content: center;
+}
+
+#form-header form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#todo-input {
+  border-radius: 25px;
+  padding-left: 5px;
+  width: 250px;
+  height: 40px;
+  font-size: 15pt;
+  font-family: "Poppins", sans-serif;
+  color: #00203fff;
+  background-color: rgb(227, 240, 244);
+}
+
+#todo-button {
+  background-color: white;
+  border: solid;
+  border-color: #adefd1ff;
+  border-width: 6px;
+  border-radius: 100%;
+  padding: 3px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+#todo-button:hover {
+  background-color: #00203fff;
+  border: solid;
+  border-color: white;
+  border-width: 6px;
+  border-radius: 100%;
+  padding: 3px;
+  width: 40px;
+  height: 40px;
+}
+
+#task-container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+#task-container input,
+p {
+  flex: 1;
+  color: #00203fff;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  align-items: center;
+  font-size: 15pt;
+}
+
+.trash-can {
+  background-color: red;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding-top: 5px;
+  padding-right: 7px;
+}
+
+.check-mark {
+  background-color: greenyellow;
+  color: black;
+  font-family: "Poppins", sans-serif;
+  padding-top: 5px;
+}
+
+#task-container ul {
+  list-style: none;
+  width: 400px;
+}
+
+#task-container li {
+  list-style: none;
+  display: flex;
+  margin-top: 20px;
+  border-radius: 25px;
+  background-color: #adefd1ff;
+  padding-left: 5px;
+}
+
+.done {
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+  color: black;
+}
+
+#dropDownList {
+  border-radius: 25px;
+  font-size: 12pt;
+  font-family: "Poppins", sans-serif;
+  background-color: #adefd1ff;
+  color: #00203fff;
+  cursor: pointer;
+}
+
+#optionButtons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+  gap: 15px;
+}
+
+#optionButtons button {
+  padding: 10px 20px;
+  background-color: rgb(69, 193, 231);
+  border-color: #adefd1ff;
+  border: solid;
+  border-width: 3px;
+  font-size: 17px;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  border-radius: 25px;
+
+  &:hover {
+    background-color: #00203fff;
+    border-color: #adefd1ff;
+  }
+  &.active {
+    background-color: #00203fff;
+    border-color: #adefd1ff;
+  }
+}
+
+#chart-container {
+  position: fixed;
+  display: flex;
+  justify-content: flex-start;
+}
